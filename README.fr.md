@@ -66,6 +66,7 @@ Ouvrez la [démo en ligne](https://arthur031221.github.io/AiSniff/) ou lancez `n
 - Un panneau latéral regroupe les détections par type. Un indicateur affiche les détections pour 1 000 mots ou caractères, en précisant qu'il compte des motifs, pas un auteur.
 - Un onglet de comparaison contient un texte avant et un texte après et montre l'évolution du nombre de détections.
 - Enregistrez le texte annoté en PNG.
+- Ouvrez un fichier `.txt`, `.md`, `.markdown` ou `.mdx` de 2 Mo au plus avec le bouton ou en le déposant sur l'éditeur. Le fichier est lu dans le navigateur. L'éditeur web analyse le Markdown comme du texte brut ; pour ignorer les blocs de code, utilisez la CLI.
 - Neuf langues d'interface : English, 繁體中文, 简体中文, 日本語, 한국어, Español, Français, Deutsch, Português (BR). Les messages des règles existent en anglais et en chinois traditionnel.
 - Le chinois simplifié est vérifié par les règles du chinois traditionnel grâce à une conversion caractère par caractère qui conserve les positions.
 

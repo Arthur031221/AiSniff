@@ -9,6 +9,7 @@ import { MarkedEditor } from "./editor";
 import { renderPng } from "./exportImage";
 import { fixFor } from "./fix";
 import { applyStatic, currentLocale, detectLocale, LOCALES, setLocale, t } from "./i18n";
+import { checkFile } from "./openFile";
 import { Popover } from "./popover";
 import { SAMPLE_EN, SAMPLE_ZH } from "./samples";
 
@@ -295,6 +296,7 @@ function showView(name: "check" | "compare"): void {
   for (const id of ["check", "compare"] as const) {
     $(`view-${id}`).hidden = id !== name;
     $(`tab-${id}`).setAttribute("aria-selected", String(id === name));
+    $(`tab-${id}`).tabIndex = id === name ? 0 : -1;
   }
   popover.hide();
   const pane = name === "check" ? [check] : [before, after];
@@ -320,6 +322,45 @@ async function exportImage(): Promise<void> {
   link.download = "aisniff.png";
   link.click();
   window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+
+async function openFile(file: File): Promise<void> {
+  const note = $("open-note");
+  const problem = checkFile(file);
+  note.textContent = problem === "ok" ? "" : t(`open.${problem}`);
+  if (problem !== "ok") return;
+  const text = (await file.text()).replace(/^\uFEFF/, "");
+  check.load(text);
+  renderCheck();
+  sampleUntouched = false;
+  defaultSample = false;
+  draft.set(text);
+  popover.hide();
+  window.scrollTo({ top: 0 });
+}
+
+/** Arrow keys, Home and End move between the tabs, and only the selected tab is a tab stop. */
+function wireTabs(): void {
+  const tabs = [...document.querySelectorAll<HTMLElement>('[role="tab"]')];
+  for (const tab of tabs) {
+    tab.addEventListener("keydown", (e) => {
+      const at = tabs.indexOf(tab);
+      const next =
+        e.key === "ArrowRight"
+          ? (at + 1) % tabs.length
+          : e.key === "ArrowLeft"
+            ? (at + tabs.length - 1) % tabs.length
+            : e.key === "Home"
+              ? 0
+              : e.key === "End"
+                ? tabs.length - 1
+                : -1;
+      if (next < 0) return;
+      e.preventDefault();
+      tabs[next].focus();
+      tabs[next].click();
+    });
+  }
 }
 
 function boot(): void {
@@ -354,6 +395,7 @@ function boot(): void {
     store.set("theme", root.dataset.theme);
   });
 
+  wireTabs();
   $("tab-check").addEventListener("click", () => showView("check"));
   $("tab-compare").addEventListener("click", () => showView("compare"));
   for (const [id, sample] of [
@@ -361,6 +403,7 @@ function boot(): void {
     ["sample-zh", SAMPLE_ZH],
   ] as const) {
     $(id).addEventListener("click", () => {
+      $("open-note").textContent = "";
       check.load(sample);
       renderCheck();
       sampleUntouched = true;
@@ -368,7 +411,30 @@ function boot(): void {
       draft.set(null);
     });
   }
+  const picker = $<HTMLInputElement>("open-input");
+  $("open").addEventListener("click", () => picker.click());
+  picker.addEventListener("change", () => {
+    const file = picker.files?.[0];
+    picker.value = "";
+    if (file) void openFile(file);
+  });
+  const dropZone = check.editor.el;
+  dropZone.addEventListener("dragover", (e) => {
+    if (!e.dataTransfer?.types.includes("Files")) return;
+    e.preventDefault();
+    dropZone.classList.add("dropping");
+  });
+  for (const type of ["dragleave", "drop"]) {
+    dropZone.addEventListener(type, () => dropZone.classList.remove("dropping"));
+  }
+  dropZone.addEventListener("drop", (e) => {
+    const file = e.dataTransfer?.files[0];
+    if (!file) return;
+    e.preventDefault();
+    void openFile(file);
+  });
   $("clear").addEventListener("click", () => {
+    $("open-note").textContent = "";
     check.load("");
     renderCheck();
     sampleUntouched = false;

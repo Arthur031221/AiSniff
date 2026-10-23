@@ -66,6 +66,7 @@ Abra a [demo ao vivo](https://arthur031221.github.io/AiSniff/) ou rode `npm inst
 - Um painel lateral agrupa as ocorrências por tipo. Um medidor mostra as ocorrências por 1.000 palavras ou caracteres e avisa que conta padrões, não autoria.
 - Uma aba de comparação guarda um texto antes e outro depois e mostra a mudança na contagem.
 - Salve o texto anotado como PNG.
+- Abra um arquivo `.txt`, `.md`, `.markdown` ou `.mdx` de até 2 MB pelo botão ou soltando-o no editor. O arquivo é lido no navegador. O editor web analisa o Markdown como texto simples; para ignorar blocos de código, use a CLI.
 - Nove idiomas de interface: English, 繁體中文, 简体中文, 日本語, 한국어, Español, Français, Deutsch, Português (BR). As mensagens das regras existem em inglês e chinês tradicional.
 - O chinês simplificado é verificado pelas regras do chinês tradicional por meio de uma conversão caractere a caractere que preserva as posições.
 

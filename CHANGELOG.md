@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+
+- Web: "Open a file" and drag and drop load a `.txt`, `.md`, `.markdown` or `.mdx` file of up to 2 MB into the Check box. The file is read in the browser, a leading byte order mark is dropped, and other types or larger files get a message in the interface language.
+- Web: the Check and Compare tabs follow the arrow keys, Home and End, and only the selected tab is a tab stop.
+- Web: on a phone the text box now comes right after the buttons, with the density meter below it, and the header uses less height.
+- Tests: every interface language file is checked for the same keys and placeholders as English.
+
 ## 0.3.0
 
 - CLI: Markdown files (`.md`, `.markdown`, `.mdx`) are scanned without their fenced code, inline code, front matter, HTML comments and link addresses, so docs that quote a flagged phrase no longer trip the gate. Positions still refer to the original file. `--markdown auto|on|off` controls it.

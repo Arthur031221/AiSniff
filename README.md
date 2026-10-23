@@ -64,6 +64,7 @@ Open the [live demo](https://arthur031221.github.io/AiSniff/) or run `npm instal
 - A side panel groups the hits by type. A meter shows hits per 1,000 words or characters, next to a line saying it counts patterns, not authorship.
 - A compare tab holds a before and an after text and shows how the hit count changed.
 - Save the annotated text as a PNG.
+- Open a `.txt`, `.md`, `.markdown` or `.mdx` file of up to 2 MB with the button or by dropping it on the editor. The file is read in the browser. The web editor scans Markdown as plain text, so use the CLI to skip code blocks.
 - Nine interface languages: English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Spanish, French, German, Portuguese (BR). Rule messages exist in English and Traditional Chinese.
 - Simplified Chinese input goes through the Traditional Chinese rules after a character conversion that keeps positions intact.
 

@@ -10,6 +10,9 @@
 6. The density meter shows the hit count, the length in units and hits per 1,000 units. A unit is one English word or one CJK character.
 7. The Compare tab holds a before and an after text. Press "Start from the current text", edit the right side and read the hit count change.
 8. "Save as image" writes a PNG of the annotated text with the density line.
+9. "Open a file" or a file dropped on the editor loads a `.txt`, `.md`, `.markdown` or `.mdx` file of up to 2 MB into the Check box. It is read in your browser. The editor scans Markdown as plain text. To skip code blocks, front matter and link addresses, use `aisniff lint`.
+
+The tabs follow the arrow keys, Home and End. On a phone the text box comes before the density meter, so the first screen already shows highlights.
 
 The text in the Check box stays when you reload the page and is dropped when you close the tab. It is kept in the browser's session storage and never leaves your machine. "Clear" and the example buttons update it too.
 

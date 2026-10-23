@@ -66,6 +66,7 @@ Exit-Codes: 0 geprüft und im Limit, 1 Limit überschritten, 2 falsche Verwendun
 - Ein Seitenfeld gruppiert die Treffer nach Art. Eine Anzeige zeigt Treffer pro 1.000 Wörter oder Zeichen und vermerkt, dass sie Muster zählt und keine Urheberschaft.
 - Ein Vergleichs-Tab nimmt einen Vorher- und einen Nachher-Text auf und zeigt die Änderung der Trefferzahl.
 - Der markierte Text lässt sich als PNG speichern.
+- Eine `.txt`-, `.md`-, `.markdown`- oder `.mdx`-Datei bis 2 MB öffnest du mit der Schaltfläche oder per Ziehen auf den Editor. Die Datei wird im Browser gelesen. Der Web-Editor prüft Markdown als reinen Text, Codeblöcke überspringst du mit der CLI.
 - Neun Oberflächensprachen: English, 繁體中文, 简体中文, 日本語, 한국어, Español, Français, Deutsch, Português (BR). Die Regelmeldungen gibt es auf Englisch und traditionellem Chinesisch.
 - Vereinfachtes Chinesisch wird mit den Regeln für traditionelles Chinesisch geprüft, über eine Zeichen-für-Zeichen-Umwandlung, die die Positionen erhält.
 

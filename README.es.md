@@ -66,6 +66,7 @@ Abre la [demo en vivo](https://arthur031221.github.io/AiSniff/) o ejecuta `npm i
 - Un panel lateral agrupa las coincidencias por tipo. Un medidor muestra las coincidencias por 1.000 palabras o caracteres, con la aclaración de que cuenta patrones, no autoría.
 - Una pestaña de comparación contiene un texto antes y otro después y muestra el cambio en el número de coincidencias.
 - Guarda el texto anotado como PNG.
+- Abre un archivo `.txt`, `.md`, `.markdown` o `.mdx` de hasta 2 MB con el botón o soltándolo en el editor. El archivo se lee en el navegador. El editor web analiza el Markdown como texto plano, así que usa la CLI para omitir los bloques de código.
 - Nueve idiomas de interfaz: English, 繁體中文, 简体中文, 日本語, 한국어, Español, Français, Deutsch, Português (BR). Los mensajes de las reglas existen en inglés y chino tradicional.
 - El chino simplificado se revisa con las reglas de chino tradicional mediante una conversión carácter a carácter que conserva las posiciones.
 

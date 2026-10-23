@@ -71,6 +71,7 @@
         <button
           id="tab-check"
           role="tab"
+          tabindex="0"
           aria-selected="true"
           aria-controls="view-check"
           data-i18n="tab.check"
@@ -80,6 +81,7 @@
         <button
           id="tab-compare"
           role="tab"
+          tabindex="-1"
           aria-selected="false"
           aria-controls="view-compare"
           data-i18n="tab.compare"
@@ -92,6 +94,8 @@
         <div class="toolbar">
           <button id="sample-en" type="button" class="chip" data-i18n="sample.en"></button>
           <button id="sample-zh" type="button" class="chip" data-i18n="sample.zh"></button>
+          <button id="open" type="button" class="chip" data-i18n="open"></button>
+          <input id="open-input" type="file" accept=".txt,.md,.markdown,.mdx,text/plain" hidden />
           <button id="clear" type="button" class="chip" data-i18n="clear"></button>
           <label class="chip select-chip">
             <span class="sr-only" data-i18n="confidence">Confidence</span>
@@ -116,6 +120,7 @@
                 <span data-i18n="meter.note"></span> <span data-i18n="meter.units"></span>
               </p>
             </section>
+            <p id="open-note" class="meter-note" role="status"></p>
             <div id="check-editor"></div>
           </div>
           <aside class="panel" aria-labelledby="panel-title">

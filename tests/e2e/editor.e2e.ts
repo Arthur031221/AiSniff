@@ -231,6 +231,77 @@ describe("editor", () => {
     );
   });
 
+  it("opens a text file and checks it", async () => {
+    await page.locator("#open-input").setInputFiles({
+      name: "post.md",
+      mimeType: "text/markdown",
+      buffer: Buffer.from("\uFEFFIn conclusion, the future looks bright.\n"),
+    });
+    const area = page.getByRole("textbox", { name: "Check" });
+    await page.waitForFunction(
+      () =>
+        document.querySelector<HTMLTextAreaElement>("#check-editor textarea")!.value.length < 60,
+    );
+    expect(await area.inputValue()).toBe("In conclusion, the future looks bright.\n");
+    expect(await page.locator("mark").count()).toBe(2);
+    await page.reload();
+    await page.waitForSelector("mark");
+    expect(await area.inputValue()).toBe("In conclusion, the future looks bright.\n");
+  });
+
+  it("refuses a file that is not text and keeps the current text", async () => {
+    const area = page.getByRole("textbox", { name: "Check" });
+    const before = await area.inputValue();
+    await page.locator("#open-input").setInputFiles({
+      name: "scan.pdf",
+      mimeType: "application/pdf",
+      buffer: Buffer.from("%PDF-1.4"),
+    });
+    expect(await page.locator("#open-note").textContent()).toContain("Only .txt");
+    expect(await area.inputValue()).toBe(before);
+  });
+
+  it("opens a file dropped on the editor", async () => {
+    const data = await page.evaluateHandle(() => {
+      const transfer = new DataTransfer();
+      transfer.items.add(new File(["Experts say it is a game-changer."], "drop.txt"));
+      return transfer;
+    });
+    await page.dispatchEvent("#check-editor .editor", "dragover", { dataTransfer: data });
+    expect(await page.locator("#check-editor .editor.dropping").count()).toBe(1);
+    await page.dispatchEvent("#check-editor .editor", "drop", { dataTransfer: data });
+    await page.waitForFunction(() =>
+      document
+        .querySelector<HTMLTextAreaElement>("#check-editor textarea")!
+        .value.startsWith("Experts"),
+    );
+    expect(await page.locator("#check-editor .editor.dropping").count()).toBe(0);
+    expect(await page.locator("mark").count()).toBe(2);
+  });
+
+  it("moves between the tabs with the arrow keys and keeps one tab stop", async () => {
+    await page.locator("#tab-check").focus();
+    await page.keyboard.press("ArrowRight");
+    expect(await page.locator("#tab-compare").getAttribute("aria-selected")).toBe("true");
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe("tab-compare");
+    expect(await page.locator("#tab-check").getAttribute("tabindex")).toBe("-1");
+    await page.keyboard.press("Home");
+    expect(await page.locator("#tab-check").getAttribute("aria-selected")).toBe("true");
+    expect(await page.locator("#tab-compare").getAttribute("tabindex")).toBe("-1");
+    await page.keyboard.press("ArrowLeft");
+    expect(await page.locator("#tab-compare").getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("shows the start of the text on the first screen of a phone", async () => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const top = await page
+      .locator("#check-editor .editor")
+      .evaluate((n) => n.getBoundingClientRect().top);
+    expect(top).toBeLessThan(560);
+    const meter = await page.locator("#meter").evaluate((n) => n.getBoundingClientRect().top);
+    expect(meter).toBeGreaterThan(top);
+  });
+
   it("makes no network request after the page has loaded", async () => {
     const requests: string[] = [];
     page.on("request", (r) => requests.push(r.url()));
