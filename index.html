@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AiSniff</title>
+    <meta
+      name="description"
+      content="Paste text and see which phrases read like AI wrote them. Each hit shows the rule, a source and a rewrite hint. Patterns, not authorship."
+    />
+    <meta property="og:title" content="AiSniff" />
+    <meta
+      property="og:description"
+      content="Paste text. See which phrases read like AI wrote them."
+    />
+    <meta
+      property="og:image"
+      content="https://raw.githubusercontent.com/Arthur031221/AiSniff/main/assets/social-card.png"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+    <script>
+      try {
+        const saved = localStorage.getItem("aisniff.theme");
+        if (saved) document.documentElement.dataset.theme = saved;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="./">
+        <img src="./logo.svg" alt="" width="36" height="36" />
+        <span>AiSniff</span>
+      </a>
+      <div class="top-tools">
+        <label class="lang">
+          <span class="sr-only" data-i18n="lang">Language</span>
+          <select id="lang" data-i18n-label="lang"></select>
+        </label>
+        <button id="theme" class="icon-btn" type="button" data-i18n-label="theme">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path
+              d="M12 3a9 9 0 1 0 9 9c0-.5 0-.9-.1-1.3A6 6 0 0 1 13.3 3.1 9 9 0 0 0 12 3z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <a
+          class="icon-btn"
+          href="https://github.com/Arthur031221/AiSniff"
+          aria-label="GitHub"
+          title="GitHub"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.89-.01-1.74-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.59.69.49A10.2 10.2 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"
+            />
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1 data-i18n="tagline">Paste text. See which phrases read like AI wrote them.</h1>
+        <p data-i18n="sub"></p>
+      </section>
+
+      <div class="tabs" role="tablist">
+        <button
+          id="tab-check"
+          role="tab"
+          aria-selected="true"
+          aria-controls="view-check"
+          data-i18n="tab.check"
+        >
+          Check
+        </button>
+        <button
+          id="tab-compare"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-compare"
+          data-i18n="tab.compare"
+        >
+          Compare
+        </button>
+      </div>
+
+      <div id="view-check" class="view" role="tabpanel" aria-labelledby="tab-check">
+        <div class="toolbar">
+          <button id="sample-en" type="button" class="chip" data-i18n="sample.en"></button>
+          <button id="sample-zh" type="button" class="chip" data-i18n="sample.zh"></button>
+          <button id="clear" type="button" class="chip" data-i18n="clear"></button>
+          <label class="chip select-chip">
+            <span class="sr-only" data-i18n="confidence">Confidence</span>
+            <select id="filter" data-i18n-label="confidence">
+              <option value="low" data-i18n="filter.all"></option>
+              <option value="medium" data-i18n="filter.medium"></option>
+              <option value="high" data-i18n="filter.high"></option>
+            </select>
+          </label>
+          <button id="export" type="button" class="chip primary" data-i18n="export"></button>
+        </div>
+        <div class="layout">
+          <div class="column">
+            <section id="meter" class="meter" aria-live="polite">
+              <div class="meter-head">
+                <span class="meter-title" data-i18n="meter.title"></span>
+                <span id="meter-band" class="band"></span>
+              </div>
+              <div class="meter-bar"><span id="meter-fill"></span></div>
+              <p id="meter-line" class="meter-line"></p>
+              <p class="meter-note">
+                <span data-i18n="meter.note"></span> <span data-i18n="meter.units"></span>
+              </p>
+            </section>
+            <div id="check-editor"></div>
+          </div>
+          <aside class="panel" aria-labelledby="panel-title">
+            <h2 id="panel-title" data-i18n="panel.title"></h2>
+            <div id="panel-body"></div>
+          </aside>
+        </div>
+      </div>
+
+      <div id="view-compare" class="view" role="tabpanel" aria-labelledby="tab-compare" hidden>
+        <div class="toolbar">
+          <button id="copy-current" type="button" class="chip" data-i18n="compare.copy"></button>
+        </div>
+        <p id="compare-summary" class="compare-summary" aria-live="polite"></p>
+        <div class="compare">
+          <section>
+            <h2><span data-i18n="compare.before"></span> <small id="before-stat"></small></h2>
+            <div id="before-editor"></div>
+          </section>
+          <section>
+            <h2><span data-i18n="compare.after"></span> <small id="after-stat"></small></h2>
+            <div id="after-editor"></div>
+          </section>
+        </div>
+        <p class="meter-note" data-i18n="compare.note"></p>
+      </div>
+    </main>
+
+    <footer>
+      <p data-i18n="rules.note"></p>
+      <p>
+        <span data-i18n="footer"></span> ·
+        <a href="https://github.com/Arthur031221/AiSniff">GitHub</a>
+      </p>
+    </footer>
+    <script type="module" src="/src/web/main.ts"></script>
+  </body>
+</html>

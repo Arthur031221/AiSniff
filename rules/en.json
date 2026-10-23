@@ -1,0 +1,959 @@
+{
+ "pack": "en",
+ "version": "0.1.0",
+ "updated": "2026-10-23",
+ "defs": {
+  "abstract": "(?:speed|efficiency|reliability|innovation|collaboration|excellence|growth|quality|performance|scalability|flexibility|creativity|transparency|integrity|accountability|sustainability|productivity|security|simplicity|trust)"
+ },
+ "rules": [
+  {
+   "id": "en.residue.ai-self",
+   "category": "residue",
+   "confidence": "high",
+   "regex": "\\bas an? (?:AI|large) language model\\b|\\bas of my (?:last |most recent )?(?:knowledge )?(?:update|cutoff|training)\\b|\\bmy knowledge cutoff\\b|\\bI(?:'|’)m sorry,? but I (?:can(?:'|’)?t|cannot)\\b|\\bI do not have (?:access to )?real-time\\b",
+   "flags": "i",
+   "message": {
+    "en": "The text talks like a chatbot about itself.",
+    "zh-TW": "文字用聊天機器人的口吻談論自己。"
+   },
+   "hint": {
+    "en": "Delete the sentence. A person would not write it in a finished piece.",
+    "zh-TW": "整句刪掉。成稿裡不會有人這樣寫。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Statements about knowledge cutoffs (2022–2023)"
+   },
+   "examples": {
+    "flag": [
+     "As an AI language model, I cannot browse the web.",
+     "As of my last knowledge update, the library had no such feature.",
+     "I'm sorry, but I can't help with that request."
+    ],
+    "pass": [
+     "The language model in the paper has 7B parameters.",
+     "My knowledge of the area is limited to two visits."
+    ]
+   }
+  },
+  {
+   "id": "en.residue.offer",
+   "category": "residue",
+   "confidence": "high",
+   "regex": "\\b(?:I hope this helps|let me know if you(?:'|’)d like|let me know if you would like|would you like me to|feel free to ask|certainly! here(?:'|’)s|certainly! here is|great question(?=!)|here is a (?:revised|rewritten|improved) version)\\b",
+   "flags": "i",
+   "message": {
+    "en": "An offer to the reader that belongs to a chat window.",
+    "zh-TW": "這是聊天視窗才會有的邀請語。"
+   },
+   "hint": {
+    "en": "Cut the offer. In a finished text the writer has no next turn.",
+    "zh-TW": "刪掉。成稿裡作者沒有下一輪對話可以接。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Collaborative communication"
+   },
+   "examples": {
+    "flag": [
+     "Great question! Here is how it works.",
+     "I hope this helps! Let me know if you would like me to expand on any section.",
+     "Certainly! Here is a revised version of your paragraph.",
+     "Would you like me to make it shorter?"
+    ],
+    "pass": [
+     "Let me know your size and we will ship the right one.",
+     "Here is the revised budget for Q3."
+    ]
+   }
+  },
+  {
+   "id": "en.residue.sycophancy",
+   "category": "residue",
+   "confidence": "medium",
+   "regex": "\\b(?:that(?:'|’)s|what) an? (?:great|excellent|fantastic|wonderful|insightful) (?:question|point|idea)\\b|\\byou(?:'|’)re absolutely right\\b",
+   "flags": "i",
+   "message": {
+    "en": "Praise for the question or request, a chat reflex.",
+    "zh-TW": "稱讚提問或要求，是聊天時的反射動作。"
+   },
+   "hint": {
+    "en": "Drop the praise and start with the answer.",
+    "zh-TW": "把讚美拿掉，直接從答案開始。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "Chatbot residue"
+   },
+   "examples": {
+    "flag": [
+     "That's a great question! The answer depends on your setup.",
+     "You're absolutely right, and that is an excellent point."
+    ],
+    "pass": [
+     "The question was a great one for the quiz.",
+     "Right, so the answer is 42."
+    ]
+   }
+  },
+  {
+   "id": "en.residue.source-hedge",
+   "category": "residue",
+   "confidence": "medium",
+   "regex": "\\b(?:while|although) (?:specific )?(?:details|information|data) (?:are|is) (?:limited|scarce|not (?:readily )?available)\\b|\\bbased on the (?:available|provided) (?:information|sources|data)\\b|\\bnot widely (?:documented|available)\\b",
+   "flags": "i",
+   "message": {
+    "en": "A hedge about what the sources say, written as if the writer could not look.",
+    "zh-TW": "一句關於來源說了什麼的保留語，好像作者沒辦法去查。"
+   },
+   "hint": {
+    "en": "Name the source you used, or check it and state the fact.",
+    "zh-TW": "寫出你用的來源，或自己查過後直接陳述事實。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Hedging disclaimers about source availability and recommended usage"
+   },
+   "examples": {
+    "flag": [
+     "While specific details are limited in the available sources, the company was founded in 2011.",
+     "Based on the available information, there is little public data on the topic."
+    ],
+    "pass": [
+     "The sources disagree on the date, so we list both.",
+     "Details about the founding are in the 2011 filing."
+    ]
+   }
+  },
+  {
+   "id": "en.opener.todays-world",
+   "category": "opener",
+   "confidence": "medium",
+   "regex": "\\bin today(?:'|’)s (?:fast-paced |modern |digital |ever-changing |ever-evolving |interconnected )?(?:world|age|era|landscape)\\b|in the (?:digital|modern|information) (?:age|era)\\b|\\bin an? (?:era|age) (?:of|where)\\b|\\bin the (?:ever-evolving|ever-changing|rapidly evolving) \\w+",
+   "flags": "i",
+   "message": {
+    "en": "A scene-setting opener that fits any topic.",
+    "zh-TW": "適用任何主題的場景式開場白。"
+   },
+   "hint": {
+    "en": "Start with the concrete thing the piece is about.",
+    "zh-TW": "從這篇文章真正要談的具體事物開始。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "Staged run-up before the point"
+   },
+   "examples": {
+    "flag": [
+     "In today's fast-paced world, time management matters more than ever.",
+     "In the ever-evolving landscape of technology, change is constant.",
+     "In the digital age, everyone is online."
+    ],
+    "pass": [
+     "Today's meeting moved to 3 pm.",
+     "Fast-paced games like chess blitz reward practice."
+    ]
+   }
+  },
+  {
+   "id": "en.opener.runup",
+   "category": "opener",
+   "confidence": "medium",
+   "regex": "\\b(?:let(?:'|’)s (?:dive in|dive into|break (?:it|this) down|explore|unpack)|here(?:'|’)s what you need to know|without further ado)\\b",
+   "flags": "i",
+   "message": {
+    "en": "A run-up sentence that announces the point instead of making it.",
+    "zh-TW": "一句預告重點、而不是直接講重點的鋪陳。"
+   },
+   "hint": {
+    "en": "Delete the run-up and say the point.",
+    "zh-TW": "刪掉鋪陳，直接講重點。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "Staged run-up before the point"
+   },
+   "examples": {
+    "flag": [
+     "Let's dive in and explore how caching works.",
+     "Here's what you need to know about the new policy.",
+     "Let's break it down step by step."
+    ],
+    "pass": [
+     "We dive in the lake every morning.",
+     "What you need to know is in the table below."
+    ]
+   }
+  },
+  {
+   "id": "en.opener.arguing",
+   "category": "opener",
+   "confidence": "low",
+   "regex": "\\b(?:it is|it(?:'|’)s) (?:worth|important to) (?:noting|mention(?:ing)?|highlighting) that\\b|\\b(?:has|have) (?:gained|attracted|received) (?:growing|increasing|significant) (?:attention|interest) in recent years\\b",
+   "flags": "i",
+   "message": {
+    "en": "A line that says the topic is worth discussing instead of discussing it.",
+    "zh-TW": "一句說主題值得討論、卻沒有開始討論的話。"
+   },
+   "hint": {
+    "en": "Cut it. Show why it matters with a number or an example.",
+    "zh-TW": "刪掉，用一個數字或例子說明為什麼重要。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Undue emphasis on significance, legacy, and broader trends"
+   },
+   "examples": {
+    "flag": [
+     "It is worth noting that the topic has gained attention in recent years.",
+     "The topic has attracted growing interest in recent years."
+    ],
+    "pass": [
+     "Recent years were dry in the valley.",
+     "It is worth 40 dollars."
+    ]
+   }
+  },
+  {
+   "id": "en.significance.testament",
+   "category": "significance",
+   "confidence": "high",
+   "regex": "\\b(?:stands as|serves as|is|remains|represents) an? (?:powerful |enduring |lasting )?(?:testament|symbol|beacon|reminder) (?:to|of|that)\\b|\\ba testament to\\b",
+   "flags": "i",
+   "message": {
+    "en": "A claim that something is a testament to or a symbol of something larger.",
+    "zh-TW": "宣稱某事物是某種更大價值的證明或象徵。"
+   },
+   "hint": {
+    "en": "Say what happened and let the reader draw the meaning.",
+    "zh-TW": "寫出發生了什麼，讓讀者自己得出意義。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Undue emphasis on significance, legacy, and broader trends"
+   },
+   "examples": {
+    "flag": [
+     "The bridge stands as a testament to the town's resilience.",
+     "The festival serves as a symbol of community pride.",
+     "Her work is a testament to human creativity."
+    ],
+    "pass": [
+     "The lab ran a test and recorded the results.",
+     "He wrote a testament in 1999 leaving the farm to his niece."
+    ]
+   }
+  },
+  {
+   "id": "en.significance.pivotal",
+   "category": "significance",
+   "confidence": "medium",
+   "regex": "\\b(?:plays?|played|playing) an? (?:pivotal|crucial|vital|key|significant|important) role\\b|\\bmark(?:s|ed|ing)? an? (?:significant |important |major )?(?:milestone|turning point|shift)\\b|\\bleaves? an? (?:indelible|lasting|enduring) (?:mark|impact|legacy)\\b",
+   "flags": "i",
+   "message": {
+    "en": "A stock phrase that raises the importance of an ordinary event.",
+    "zh-TW": "把普通事件說得很重要的慣用語。"
+   },
+   "hint": {
+    "en": "Give the fact. If it was important, the fact shows it.",
+    "zh-TW": "給出事實。如果真的重要，事實自己會說明。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Undue emphasis on significance, legacy, and broader trends"
+   },
+   "examples": {
+    "flag": [
+     "The merger played a pivotal role in the company's growth.",
+     "It plays a crucial role in shaping the future of the industry.",
+     "This marked a significant milestone in the region's history."
+    ],
+    "pass": [
+     "He plays a role in the school play.",
+     "The role of the committee is to approve budgets."
+    ]
+   }
+  },
+  {
+   "id": "en.significance.broader",
+   "category": "significance",
+   "confidence": "medium",
+   "regex": "\\b(?:reflects?|reflecting|highlights?|underscores?|contributes? to) (?:a |the )?(?:broader|wider|larger) (?:trend|shift|movement|landscape|context)\\b",
+   "flags": "i",
+   "message": {
+    "en": "A link to a bigger trend that the text does not support.",
+    "zh-TW": "連到一個文章沒有佐證的更大趨勢。"
+   },
+   "hint": {
+    "en": "Cut the link, or support it with a named source.",
+    "zh-TW": "刪掉這個連結，或用具名來源佐證。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Undue emphasis on significance, legacy, and broader trends"
+   },
+   "examples": {
+    "flag": [
+     "The release reflects a broader trend toward remote work.",
+     "This contributes to the broader landscape of open science."
+    ],
+    "pass": [
+     "A wider lane would fix it.",
+     "The trend line is in Figure 2."
+    ]
+   }
+  },
+  {
+   "id": "en.significance.ing-tail",
+   "category": "significance",
+   "confidence": "medium",
+   "regex": ",\\s+(?:highlighting|underscoring|emphasizing|reflecting|showcasing|symbolizing|demonstrating|cementing|solidifying|contributing to|ensuring)\\s+(?:its|the|their|his|her|a|an|how|that)\\b[^.\\n]{0,60}",
+   "flags": "i",
+   "message": {
+    "en": "A trailing -ing phrase that adds an unsupported meaning to the sentence.",
+    "zh-TW": "句尾加上一個沒有佐證的 -ing 片語，替句子添意義。"
+   },
+   "hint": {
+    "en": "End the sentence at the fact. Move any real claim to its own sentence with a source.",
+    "zh-TW": "句子寫到事實就停。真正的主張另起一句並附上來源。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Undue emphasis on significance, legacy, and broader trends"
+   },
+   "examples": {
+    "flag": [
+     "The company opened a plant in Ohio, highlighting its commitment to growth.",
+     "The law passed in 2020, reflecting a shift in public opinion.",
+     "The film earned $4 million, underscoring its popularity."
+    ],
+    "pass": [
+     "The company opened a plant in Ohio, hiring 200 people.",
+     "She left early, thinking about dinner."
+    ]
+   }
+  },
+  {
+   "id": "en.vocabulary.ai-words",
+   "category": "vocabulary",
+   "confidence": "medium",
+   "phrases": [
+    "delve",
+    "delves",
+    "delving",
+    "tapestry",
+    "bolster",
+    "bolstering",
+    "underscore",
+    "underscores",
+    "underscoring",
+    "showcase",
+    "showcases",
+    "showcasing"
+   ],
+   "message": {
+    "en": "A word that studies find far more often in model output than in older human writing.",
+    "zh-TW": "研究發現在模型輸出裡出現頻率遠高於舊有人類文字的詞。"
+   },
+   "hint": {
+    "en": "Use the plain word: look into, mix, support, show, detail.",
+    "zh-TW": "改用平白的字：研究、混合、支持、顯示、細節。"
+   },
+   "source": {
+    "id": "kobak-2025"
+   },
+   "examples": {
+    "flag": [
+     "Let's delve into the rich tapestry of local history.",
+     "The report underscores the need to bolster security.",
+     "The app showcases the data."
+    ],
+    "pass": [
+     "The miners dug a deep well.",
+     "The delivery was late."
+    ]
+   }
+  },
+  {
+   "id": "en.vocabulary.community-words",
+   "category": "vocabulary",
+   "confidence": "low",
+   "phrases": [
+    "meticulous",
+    "meticulously",
+    "intricacies",
+    "intricate",
+    "interplay",
+    "garner",
+    "garnered",
+    "garnering",
+    "multifaceted"
+   ],
+   "message": {
+    "en": "A word that lists of AI tells keep naming. Alone it proves nothing.",
+    "zh-TW": "AI 特徵清單一再點名的詞。單獨出現不能說明什麼。"
+   },
+   "hint": {
+    "en": "Keep it if it is the exact word. Swap it if it is only there for tone.",
+    "zh-TW": "若是最精準的字就留著；只是為了語氣就換掉。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "High density of \"AI vocabulary\" words"
+   },
+   "examples": {
+    "flag": [
+     "The team paid meticulous attention to the intricacies of the interplay between the parts.",
+     "The project garnered wide praise."
+    ],
+    "pass": [
+     "The tailor was careful.",
+     "She earned praise."
+    ]
+   }
+  },
+  {
+   "id": "en.vocabulary.low-words",
+   "category": "vocabulary",
+   "confidence": "low",
+   "phrases": [
+    "crucial",
+    "robust",
+    "vibrant",
+    "enduring",
+    "enhance",
+    "enhances",
+    "enhancing",
+    "align with",
+    "aligns with",
+    "valuable insights"
+   ],
+   "minCount": 2,
+   "message": {
+    "en": "A common word that shows up more in model output. Weak on its own.",
+    "zh-TW": "在模型輸出裡出現得比較多的常見字。單獨看很弱。"
+   },
+   "hint": {
+    "en": "Check if a plainer word says the same thing: key, strong, useful, lasting.",
+    "zh-TW": "看看更平白的字是否說得一樣：關鍵、強、有用、持久。"
+   },
+   "source": {
+    "id": "kobak-2025"
+   },
+   "examples": {
+    "flag": [
+     "The crucial and robust framework offers valuable insights that enhance outcomes and align with goals.",
+     "A vibrant, enduring community."
+    ],
+    "pass": [
+     "The robot arm lifts boxes.",
+     "A valuable stamp sold for $200."
+    ]
+   }
+  },
+  {
+   "id": "en.vocabulary.additionally",
+   "category": "vocabulary",
+   "confidence": "low",
+   "regex": "(?:^|(?<=[.!?]\\s+))(Additionally|Moreover|Furthermore)\\b",
+   "highlight": "groups",
+   "minCount": 3,
+   "message": {
+    "en": "Several sentences that open with Additionally or Moreover.",
+    "zh-TW": "多個句子以 Additionally 或 Moreover 開頭。"
+   },
+   "hint": {
+    "en": "Join the ideas with 'and', or let the order carry the link.",
+    "zh-TW": "用 and 連起來，或讓順序本身表達關聯。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "High density of \"AI vocabulary\" words"
+   },
+   "examples": {
+    "flag": [
+     "The tool is fast. Additionally, it is cheap. Moreover, it is open. Furthermore, it is small.",
+     "The tool is fast.\n\nAdditionally, it is cheap.\n\nMoreover, it is open.\n\nFurthermore, it is small."
+    ],
+    "pass": [
+     "The tool is fast. Additionally, it is cheap.",
+     "Moreover is a word."
+    ]
+   }
+  },
+  {
+   "id": "en.vocabulary.boasts",
+   "category": "vocabulary",
+   "confidence": "medium",
+   "regex": "\\b(?:boasts?|boasting) (?:an?|the|over|more than|\\d+)\\b|\\bserves as (?:a|an|the)\\b",
+   "flags": "i",
+   "message": {
+    "en": "'Boasts' or 'features' used where 'has' would do.",
+    "zh-TW": "在用 has 就夠的地方，用了 boasts 或 features。"
+   },
+   "hint": {
+    "en": "Write 'has' or 'is'.",
+    "zh-TW": "寫 has 或 is。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Avoidance of basic copulatives (\"is\"/\"are\" phrases)"
+   },
+   "examples": {
+    "flag": [
+     "The city boasts a vibrant arts scene.",
+     "The hall serves as a venue for weddings."
+    ],
+    "pass": [
+     "He never boasts about it.",
+     "The film features Tom Hanks."
+    ]
+   }
+  },
+  {
+   "id": "en.contrast.not-just",
+   "category": "contrast",
+   "confidence": "low",
+   "regex": "\\b(?:it(?:'|’)s not|this is not|that(?:'|’)s not|it is not|it isn(?:'|’)t|this isn(?:'|’)t|that isn(?:'|’)t|is not|isn(?:'|’)t) (?:just|merely|only|simply) (?:an? |the |about )?[^.,;\\n]{2,40}?(?:,| but| —) (?:it(?:'|’)s|it is|but|also|and)\\b",
+   "flags": "i",
+   "message": {
+    "en": "A 'not just X but Y' frame that sets up a contrast nobody asked for.",
+    "zh-TW": "「不只 X 還有 Y」的句型，造了一個沒人問的對比。"
+   },
+   "hint": {
+    "en": "State Y alone. If X is a real contrast, name who believed X.",
+    "zh-TW": "只寫 Y。如果 X 是真的對比，說明誰這樣相信。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Not just X, but also Y"
+   },
+   "examples": {
+    "flag": [
+     "It's not just a tool, it's a movement.",
+     "This is not merely a game but also a way to learn.",
+     "It isn't only about speed but also about trust."
+    ],
+    "pass": [
+     "It is not just a flesh wound, the doctor said, and he was right to worry.",
+     "Not many came."
+    ]
+   }
+  },
+  {
+   "id": "en.contrast.not-x-but-y",
+   "category": "contrast",
+   "confidence": "low",
+   "regex": "\\b(?:isn(?:'|’)t|is not|not) about [^.,;\\n]{2,30}[,;] (?:it(?:'|’)s|it is) about\\b|\\b(?:goal|point|aim) is not to [^.,;\\n]{2,30}, but (?:to )?\\b",
+   "flags": "i",
+   "message": {
+    "en": "A 'not X, but Y' frame, a favourite of model output.",
+    "zh-TW": "「不是 X，而是 Y」的句型，是模型輸出的偏好。"
+   },
+   "hint": {
+    "en": "Say what Y is. Keep X only if someone actually claimed it.",
+    "zh-TW": "直接說 Y 是什麼。X 只有在真有人主張時才保留。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Not X, but Y"
+   },
+   "examples": {
+    "flag": [
+     "The goal is not to win, but to learn.",
+     "This isn't about money, it's about respect."
+    ],
+    "pass": [
+     "Not all dogs bark, but most do.",
+     "She did not win."
+    ]
+   }
+  },
+  {
+   "id": "en.contrast.more-than-just",
+   "category": "contrast",
+   "confidence": "low",
+   "regex": "\\bmore than (?:just|merely|simply) (?:an?|the)\\b",
+   "flags": "i",
+   "message": {
+    "en": "'More than just' used as an easy lift.",
+    "zh-TW": "把 more than just 當作輕鬆拔高的說法。"
+   },
+   "hint": {
+    "en": "Say what it is, then say the extra thing as its own fact.",
+    "zh-TW": "先說它是什麼，再把額外的事當作獨立事實寫出來。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "Not X but Y"
+   },
+   "examples": {
+    "flag": [
+     "Coffee is more than just a drink.",
+     "It's more than just a phone."
+    ],
+    "pass": [
+     "He earned more than just his salary: he got a bonus of $500.",
+     "Just a moment."
+    ]
+   }
+  },
+  {
+   "id": "en.hedge.important-to-note",
+   "category": "hedge",
+   "confidence": "medium",
+   "regex": "\\b(?:it(?:'|’)s|it is) (?:worth (?:noting|mentioning)|(?:important|crucial|essential) to (?:note|remember|mention|understand|recognize)) that\\b|\\bkeep in mind that\\b",
+   "flags": "i",
+   "fix": {
+    "delete": true
+   },
+   "message": {
+    "en": "A 'note that' preface before an ordinary statement.",
+    "zh-TW": "在普通陳述前加的「請注意」前綴。"
+   },
+   "hint": {
+    "en": "Delete the preface. Keep the statement.",
+    "zh-TW": "刪掉前綴，留下陳述。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Undue emphasis on significance, legacy, and broader trends"
+   },
+   "examples": {
+    "flag": [
+     "It's important to note that results may vary.",
+     "It is worth mentioning that the API is rate limited.",
+     "Keep in mind that your mileage may vary."
+    ],
+    "pass": [
+     "Note that the file is gzip.",
+     "It is important."
+    ]
+   }
+  },
+  {
+   "id": "en.hedge.depends",
+   "category": "hedge",
+   "confidence": "low",
+   "regex": "\\b(?:ultimately,? )?(?:it|the (?:best|right) (?:choice|answer|approach)) (?:depends|varies) (?:on|from) (?:your |each |the )?(?:specific |individual |unique )?(?:needs|circumstances|situation|person|case)\\b|\\bthere are many factors to consider\\b",
+   "flags": "i",
+   "message": {
+    "en": "A both-sides line that takes no side.",
+    "zh-TW": "兩邊都說、卻不站任何一邊的句子。"
+   },
+   "hint": {
+    "en": "Pick a side for this case and say why, or give the condition that decides it.",
+    "zh-TW": "針對這個情況選邊並說明理由，或寫出決定結果的條件。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "Stacked qualifiers"
+   },
+   "examples": {
+    "flag": [
+     "Ultimately, it depends on your specific needs and goals.",
+     "There are many factors to consider, and the best choice varies from person to person."
+    ],
+    "pass": [
+     "It depends on the weather; if it rains we stay in.",
+     "Ultimately he left."
+    ]
+   }
+  },
+  {
+   "id": "en.hedge.stacked",
+   "category": "hedge",
+   "confidence": "medium",
+   "regex": "\\b(?:could|might|may|can) (?:potentially|possibly|arguably|perhaps) (?:possibly|potentially|arguably|perhaps|tend|help|lead|improve)\\b[^.\\n]{0,30}\\b(?:in some cases|somewhat|to some extent|in certain)\\b|\\b(?:potentially|possibly|arguably) (?:possibly|potentially|arguably)\\b",
+   "flags": "i",
+   "message": {
+    "en": "Hedges stacked in one sentence.",
+    "zh-TW": "一個句子裡疊了多個保留語。"
+   },
+   "hint": {
+    "en": "Keep one hedge, or none, and give the evidence.",
+    "zh-TW": "保留一個保留語或完全不用，再給出證據。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "Stacked qualifiers"
+   },
+   "examples": {
+    "flag": [
+     "It could potentially possibly help in some cases.",
+     "This may arguably tend to improve results somewhat."
+    ],
+    "pass": [
+     "It may help.",
+     "The fix could possibly be wrong."
+    ]
+   }
+  },
+  {
+   "id": "en.authority.experts",
+   "category": "authority",
+   "confidence": "medium",
+   "regex": "\\b(?:experts|scholars|critics|observers|analysts|industry (?:experts|observers|leaders)|many (?:researchers|experts)) (?:say|believe|argue|note|suggest|agree)\\b|\\bit is widely (?:believed|regarded)\\b",
+   "flags": "i",
+   "message": {
+    "en": "An unnamed authority is used to carry a claim.",
+    "zh-TW": "用一個沒有名字的權威來撐一個主張。"
+   },
+   "hint": {
+    "en": "Name the expert, the study or the date, or drop the claim.",
+    "zh-TW": "寫出專家、研究或日期的名字，否則刪掉這個主張。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Vague attributions and overgeneralization of opinions"
+   },
+   "examples": {
+    "flag": [
+     "Experts say the market will grow.",
+     "Many researchers believe it works.",
+     "Industry observers note that prices are falling."
+    ],
+    "pass": [
+     "Dr. Lin says the market will grow.",
+     "Studies cited in Table 2 showed a benefit."
+    ]
+   }
+  },
+  {
+   "id": "en.closer.in-conclusion",
+   "category": "closer",
+   "confidence": "medium",
+   "regex": "(?:^|(?<=[.!?]\\s)|(?<=\\n))(In conclusion|In summary|To summarize|To sum up|Overall|Ultimately|In essence),|\\b(?:the )?key takeaway is\\b",
+   "flags": "im",
+   "highlight": "match",
+   "message": {
+    "en": "A closer that restates the piece with a label.",
+    "zh-TW": "貼著標籤把全文重述一次的收尾。"
+   },
+   "hint": {
+    "en": "End on the last real point, or on what the reader should do.",
+    "zh-TW": "結束在最後一個實質論點，或讀者該做的事。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Section summaries"
+   },
+   "examples": {
+    "flag": [
+     "In conclusion, remote work has pros and cons.",
+     "Overall, this guide has shown how caching works.",
+     "To sum up, the key takeaway is to plan ahead."
+    ],
+    "pass": [
+     "The conclusion of the trial was swift.",
+     "Overall length: 40 cm."
+    ]
+   }
+  },
+  {
+   "id": "en.closer.future",
+   "category": "closer",
+   "confidence": "medium",
+   "regex": "\\b(?:the )?future (?:looks|is) (?:bright|promising)\\b|\\b(?:the )?possibilities are (?:endless|limitless)\\b|\\bas (?:technology|the field|the industry|society) continues to (?:evolve|grow|advance)\\b|\\bonly time will tell\\b",
+   "flags": "i",
+   "message": {
+    "en": "A closer that points at a bright future without saying how.",
+    "zh-TW": "指向光明未來、卻沒說怎麼走的收尾。"
+   },
+   "hint": {
+    "en": "Name the next concrete step, the date or the owner.",
+    "zh-TW": "寫出下一個具體步驟、日期或負責人。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Outline-like conclusions about challenges and future prospects"
+   },
+   "examples": {
+    "flag": [
+     "The future looks bright for the industry.",
+     "Looking ahead, the possibilities are endless.",
+     "As technology continues to evolve, new opportunities will emerge."
+    ],
+    "pass": [
+     "The future tense of the verb is irregular.",
+     "Looking ahead, the road splits at the next bridge."
+    ]
+   }
+  },
+  {
+   "id": "en.closer.challenges",
+   "category": "closer",
+   "confidence": "medium",
+   "regex": "\\bdespite (?:these|its|the|such|several|numerous) (?:challenges|obstacles|setbacks|hurdles|limitations)\\b[^.\\n]{0,40}\\b(?:continues?|remains?|thrives?|persists?)\\b",
+   "flags": "i",
+   "message": {
+    "en": "The 'despite challenges' formula: a problem is named and brushed aside.",
+    "zh-TW": "「儘管有挑戰」公式：提到問題又輕輕帶過。"
+   },
+   "hint": {
+    "en": "Name the actual challenge and what was done about it.",
+    "zh-TW": "寫出實際的挑戰，以及做了什麼。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Outline-like conclusions about challenges and future prospects"
+   },
+   "examples": {
+    "flag": [
+     "Despite these challenges, the city continues to thrive.",
+     "Despite its challenges, the program remains a success."
+    ],
+    "pass": [
+     "Despite the rain, we walked.",
+     "The challenges were funding and staff, and the board cut both."
+    ]
+   }
+  },
+  {
+   "id": "en.closer.one-liner",
+   "category": "closer",
+   "confidence": "low",
+   "regex": "(?:^|(?<=[.!?]\\s)|(?<=\\n))(?:[A-Z]\\w+(?: \\w+)?, (?:big|real|lasting) (?:impact|results|change)|Simple,? (?:yet|but) (?:powerful|effective)|Quality over quantity)\\b[^.\\n]{0,20}[.!]",
+   "flags": "m",
+   "message": {
+    "en": "A short punchy closing line that sums up the paragraph.",
+    "zh-TW": "一句短促有力、替段落作結的話。"
+   },
+   "hint": {
+    "en": "Check whether the paragraph already said it. If so, cut the line.",
+    "zh-TW": "看看段落是否已經說過，是的話就刪掉。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "One-line closers and dramatic fragments"
+   },
+   "examples": {
+    "flag": [
+     "Small steps, big impact.",
+     "Simple, yet powerful.",
+     "Quality over quantity, every time."
+    ],
+    "pass": [
+     "Small steps tire the dog.",
+     "Simple tools work."
+    ]
+   }
+  },
+  {
+   "id": "en.promo.nestled",
+   "category": "promo",
+   "confidence": "medium",
+   "regex": "\\b(?:nestled (?:in|within|among|at)|in the heart of|hidden gem|rich (?:cultural )?(?:heritage|history|tapestry)|breathtaking|must-visit|rolling hills|vibrant (?:community|scene|culture))\\b",
+   "flags": "i",
+   "message": {
+    "en": "Brochure language for a place.",
+    "zh-TW": "描述地點的旅遊手冊語氣。"
+   },
+   "hint": {
+    "en": "Say where it is and what is in it, with figures.",
+    "zh-TW": "寫出位置與裡面有什麼，附上數字。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Promotional and advertisement-like language"
+   },
+   "examples": {
+    "flag": [
+     "Nestled in the heart of the valley, the village offers breathtaking views.",
+     "A hidden gem with a rich cultural heritage."
+    ],
+    "pass": [
+     "The cat slept on the blanket.",
+     "The village has 400 residents."
+    ]
+   }
+  },
+  {
+   "id": "en.promo.commitment",
+   "category": "promo",
+   "confidence": "low",
+   "regex": "\\b(?:committed to (?:excellence|innovation|quality|delivering)|dedicated to (?:delivering|providing|excellence)|world-class|cutting-edge|state-of-the-art|best-in-class|game-chang(?:er|ing)|unlock(?:ing)? the (?:power|potential))\\b",
+   "flags": "i",
+   "message": {
+    "en": "A claim of commitment or dedication that a press release would make.",
+    "zh-TW": "新聞稿才會有的承諾與奉獻宣稱。"
+   },
+   "hint": {
+    "en": "Show the commitment with a fact: a date, a budget, a result.",
+    "zh-TW": "用事實展現承諾：日期、預算、成果。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Promotional and advertisement-like language"
+   },
+   "examples": {
+    "flag": [
+     "We are committed to excellence and dedicated to delivering world-class solutions.",
+     "We offer world-class, cutting-edge tools."
+    ],
+    "pass": [
+     "He was committed to a hospital for a week.",
+     "Dedicated servers cost more."
+    ]
+   }
+  },
+  {
+   "id": "en.rhythm.triad",
+   "category": "rhythm",
+   "confidence": "low",
+   "regex": "\\b({{abstract}}), ({{abstract}}),? (?:and|&) ({{abstract}})\\b",
+   "flags": "i",
+   "highlight": "match",
+   "message": {
+    "en": "Three abstract nouns in a row, the rule of three.",
+    "zh-TW": "連續三個抽象名詞，三段式。"
+   },
+   "hint": {
+    "en": "Pick the one that is true for this case and give an example.",
+    "zh-TW": "挑出對這個情況為真的那一個，並舉例。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Rule of three"
+   },
+   "examples": {
+    "flag": [
+     "The tool improves speed, efficiency, and reliability.",
+     "We value innovation, collaboration and excellence."
+    ],
+    "pass": [
+     "She bought eggs, milk and bread.",
+     "The tool improves speed and reliability."
+    ]
+   }
+  },
+  {
+   "id": "en.rhythm.fragments",
+   "category": "rhythm",
+   "confidence": "low",
+   "regex": "(?:^|(?<=[.!?]\\s))(?:[A-Z][a-z]+(?: [a-z]+)?\\.\\s+){3,}[A-Z][a-z]+(?: [a-z]+)?\\.",
+   "flags": "m",
+   "message": {
+    "en": "Several short fragments in a row, used for punch.",
+    "zh-TW": "連續幾個短句片段，用來製造力道。"
+   },
+   "hint": {
+    "en": "Join them into a normal sentence unless each one carries news.",
+    "zh-TW": "合併成一般句子，除非每個片段都帶有新資訊。"
+   },
+   "source": {
+    "id": "blader-humanizer",
+    "anchor": "One-line closers and dramatic fragments"
+   },
+   "examples": {
+    "flag": [
+     "No fluff. No filler. Just results. Pure speed."
+    ],
+    "pass": [
+     "No fluff. Just results.",
+     "We went to the market and bought apples for the week."
+    ]
+   }
+  }
+ ]
+}

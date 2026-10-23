@@ -1,0 +1,534 @@
+{
+  "en": {
+    "bands": {
+      "p95": 0,
+      "p99": 8.73362445414847
+    },
+    "overall": {
+      "humanN": 23752,
+      "chatgptN": 13422,
+      "humanMeanDensity": 0.13113899952334823,
+      "chatgptMeanDensity": 1.7657053642718317,
+      "auroc": 0.6344802359442747,
+      "humanFlagged": 0.01932468844728865,
+      "chatgptFlagged": 0.2870660110266726,
+      "humanAbove95": 0.01932468844728865,
+      "humanAbove99": 0.009893903671269787,
+      "chatgptAbove95": 0.2870660110266726,
+      "chatgptAbove99": 0.2300700342720906
+    },
+    "domains": [
+      {
+        "domain": "reddit_eli5",
+        "humanN": 20621,
+        "chatgptN": 8331,
+        "humanDensity": 0.12560528304074128,
+        "chatgptDensity": 2.026484372131506,
+        "auroc": 0.6509319374858257
+      },
+      {
+        "domain": "open_qa",
+        "humanN": 229,
+        "chatgptN": 1714,
+        "humanDensity": 0.07360374215837054,
+        "chatgptDensity": 0.8470929291513546,
+        "auroc": 0.5429012550126622
+      },
+      {
+        "domain": "wiki_csai",
+        "humanN": 408,
+        "chatgptN": 414,
+        "humanDensity": 0.12535679357767085,
+        "chatgptDensity": 0.9766933127279381,
+        "auroc": 0.5684202424931325
+      },
+      {
+        "domain": "finance",
+        "humanN": 1882,
+        "chatgptN": 2280,
+        "humanDensity": 0.1295649549742333,
+        "chatgptDensity": 1.8762060151702267,
+        "auroc": 0.675002447004866
+      },
+      {
+        "domain": "medicine",
+        "humanN": 612,
+        "chatgptN": 683,
+        "humanDensity": 0.34781846584964027,
+        "chatgptDensity": 0.9994700855138142,
+        "auroc": 0.5680664408271849
+      }
+    ],
+    "rules": [
+      {
+        "id": "en.hedge.important-to-note",
+        "human": 153,
+        "chatgpt": 2221,
+        "ratio": 20.472906190241964
+      },
+      {
+        "id": "en.closer.in-conclusion",
+        "human": 58,
+        "chatgpt": 1159,
+        "ratio": 28.182389386553414
+      },
+      {
+        "id": "en.residue.offer",
+        "human": 77,
+        "chatgpt": 492,
+        "ratio": 9.011492929806126
+      },
+      {
+        "id": "en.significance.pivotal",
+        "human": 13,
+        "chatgpt": 121,
+        "ratio": 13.126966795966803
+      },
+      {
+        "id": "en.vocabulary.community-words",
+        "human": 26,
+        "chatgpt": 33,
+        "ratio": 1.7900409267227457
+      },
+      {
+        "id": "en.vocabulary.low-words",
+        "human": 9,
+        "chatgpt": 40,
+        "ratio": 6.268156780443285
+      },
+      {
+        "id": "en.promo.nestled",
+        "human": 4,
+        "chatgpt": 40,
+        "ratio": 14.103352755997392
+      },
+      {
+        "id": "en.vocabulary.boasts",
+        "human": 18,
+        "chatgpt": 25,
+        "ratio": 1.9587989938885269
+      },
+      {
+        "id": "en.contrast.not-just",
+        "human": 23,
+        "chatgpt": 17,
+        "ratio": 1.0424217254432855
+      },
+      {
+        "id": "en.vocabulary.ai-words",
+        "human": 21,
+        "chatgpt": 14,
+        "ratio": 0.9402235170664929
+      },
+      {
+        "id": "en.significance.testament",
+        "human": 3,
+        "chatgpt": 26,
+        "ratio": 12.222905721864405
+      },
+      {
+        "id": "en.authority.experts",
+        "human": 10,
+        "chatgpt": 17,
+        "ratio": 2.397569968519557
+      },
+      {
+        "id": "en.hedge.depends",
+        "human": 11,
+        "chatgpt": 11,
+        "ratio": 1.4103352755997391
+      },
+      {
+        "id": "en.significance.ing-tail",
+        "human": 6,
+        "chatgpt": 13,
+        "ratio": 3.0557264304661014
+      },
+      {
+        "id": "en.residue.ai-self",
+        "human": 0,
+        "chatgpt": 17,
+        "ratio": null
+      },
+      {
+        "id": "en.opener.todays-world",
+        "human": 12,
+        "chatgpt": 2,
+        "ratio": 0.23505587926662322
+      },
+      {
+        "id": "en.contrast.more-than-just",
+        "human": 10,
+        "chatgpt": 2,
+        "ratio": 0.28206705511994784
+      },
+      {
+        "id": "common.format.markdown-bold",
+        "human": 9,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "en.promo.commitment",
+        "human": 0,
+        "chatgpt": 7,
+        "ratio": null
+      },
+      {
+        "id": "en.residue.source-hedge",
+        "human": 2,
+        "chatgpt": 3,
+        "ratio": 2.1155029133996086
+      },
+      {
+        "id": "en.closer.future",
+        "human": 5,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "common.residue.placeholder",
+        "human": 1,
+        "chatgpt": 3,
+        "ratio": 4.231005826799217
+      },
+      {
+        "id": "en.contrast.not-x-but-y",
+        "human": 4,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "en.opener.runup",
+        "human": 2,
+        "chatgpt": 1,
+        "ratio": 0.7051676377998697
+      },
+      {
+        "id": "en.residue.sycophancy",
+        "human": 2,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "en.closer.challenges",
+        "human": 0,
+        "chatgpt": 2,
+        "ratio": null
+      },
+      {
+        "id": "en.closer.one-liner",
+        "human": 2,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "en.opener.arguing",
+        "human": 0,
+        "chatgpt": 1,
+        "ratio": null
+      },
+      {
+        "id": "en.rhythm.fragments",
+        "human": 1,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "common.residue.utm-source",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "common.format.emoji-lead",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "en.significance.broader",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "en.vocabulary.additionally",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "en.hedge.stacked",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "en.rhythm.triad",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      }
+    ]
+  },
+  "zh": {
+    "bands": {
+      "p95": 3.3557046979865772,
+      "p99": 12.987012987012989
+    },
+    "overall": {
+      "humanN": 9812,
+      "chatgptN": 8480,
+      "humanMeanDensity": 0.48360545801497307,
+      "chatgptMeanDensity": 2.253632531916776,
+      "auroc": 0.5903838808755548,
+      "humanFlagged": 0.058499796167957606,
+      "chatgptFlagged": 0.23679245283018868,
+      "humanAbove95": 0.050244598450876476,
+      "humanAbove99": 0.010803098247044436,
+      "chatgptAbove95": 0.22075471698113208,
+      "chatgptAbove99": 0.060849056603773585
+    },
+    "domains": [
+      {
+        "domain": "open_qa",
+        "humanN": 3461,
+        "chatgptN": 2057,
+        "humanDensity": 0.1418108514281088,
+        "chatgptDensity": 2.837011968492067,
+        "auroc": 0.6406169474793578
+      },
+      {
+        "domain": "baike",
+        "humanN": 2227,
+        "chatgptN": 2235,
+        "humanDensity": 1.0208167746316654,
+        "chatgptDensity": 2.254405442744377,
+        "auroc": 0.5322106464390152
+      },
+      {
+        "domain": "nlpcc_dbqa",
+        "humanN": 417,
+        "chatgptN": 1903,
+        "humanDensity": 1.043057013381702,
+        "chatgptDensity": 2.622413321200417,
+        "auroc": 0.585635957865342
+      },
+      {
+        "domain": "finance",
+        "humanN": 405,
+        "chatgptN": 956,
+        "humanDensity": 1.1329174717789714,
+        "chatgptDensity": 1.4635376271311111,
+        "auroc": 0.5484309623430962
+      },
+      {
+        "domain": "medicine",
+        "humanN": 545,
+        "chatgptN": 553,
+        "humanDensity": 0.6406618577953381,
+        "chatgptDensity": 2.134119457639137,
+        "auroc": 0.6383894354397199
+      },
+      {
+        "domain": "psychology",
+        "humanN": 2618,
+        "chatgptN": 537,
+        "humanDensity": 0.25828716099815324,
+        "chatgptDensity": 0.8430050920492553,
+        "auroc": 0.5715715438028944
+      },
+      {
+        "domain": "law",
+        "humanN": 139,
+        "chatgptN": 239,
+        "humanDensity": 0.4448028021815249,
+        "chatgptDensity": 0.8954718437060901,
+        "auroc": 0.5690978597874838
+      }
+    ],
+    "rules": [
+      {
+        "id": "zh-TW.rhythm.quad",
+        "human": 376,
+        "chatgpt": 906,
+        "ratio": 2.5528025103173553
+      },
+      {
+        "id": "zh-TW.format.quotes",
+        "human": 148,
+        "chatgpt": 804,
+        "ratio": 5.7553428351454095
+      },
+      {
+        "id": "zh-TW.closer.summary",
+        "human": 21,
+        "chatgpt": 470,
+        "ratio": 23.711303459649056
+      },
+      {
+        "id": "zh-TW.translationese.do-verb",
+        "human": 52,
+        "chatgpt": 211,
+        "ratio": 4.29888648239382
+      },
+      {
+        "id": "zh-TW.translationese.one-of",
+        "human": 44,
+        "chatgpt": 186,
+        "ratio": 4.478546968732553
+      },
+      {
+        "id": "zh-TW.residue.ai-self",
+        "human": 0,
+        "chatgpt": 134,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.rhythm.ordinal",
+        "human": 48,
+        "chatgpt": 81,
+        "ratio": 1.7878070560666244
+      },
+      {
+        "id": "zh-TW.hedge.fence-sitting",
+        "human": 14,
+        "chatgpt": 71,
+        "ratio": 5.372880464792818
+      },
+      {
+        "id": "zh-TW.significance.vocab",
+        "human": 31,
+        "chatgpt": 12,
+        "ratio": 0.410106278094136
+      },
+      {
+        "id": "zh-TW.significance.stock",
+        "human": 12,
+        "chatgpt": 14,
+        "ratio": 1.2360147548114933
+      },
+      {
+        "id": "zh-TW.authority.experts",
+        "human": 3,
+        "chatgpt": 21,
+        "ratio": 7.4160885288689595
+      },
+      {
+        "id": "zh-TW.contrast.not-just",
+        "human": 7,
+        "chatgpt": 7,
+        "ratio": 1.0594412184098514
+      },
+      {
+        "id": "zh-TW.residue.offer",
+        "human": 0,
+        "chatgpt": 9,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.opener.era-hat",
+        "human": 0,
+        "chatgpt": 8,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.promo.paradise",
+        "human": 2,
+        "chatgpt": 2,
+        "ratio": 1.0594412184098516
+      },
+      {
+        "id": "zh-TW.residue.sycophancy",
+        "human": 1,
+        "chatgpt": 1,
+        "ratio": 1.0594412184098516
+      },
+      {
+        "id": "zh-TW.hedge.stacked",
+        "human": 2,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "zh-TW.closer.future",
+        "human": 1,
+        "chatgpt": 0,
+        "ratio": 0
+      },
+      {
+        "id": "zh-TW.rhythm.triad",
+        "human": 0,
+        "chatgpt": 1,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.wording.mainland",
+        "human": 0,
+        "chatgpt": 1,
+        "ratio": null
+      },
+      {
+        "id": "common.residue.utm-source",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "common.residue.placeholder",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "common.format.markdown-bold",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "common.format.emoji-lead",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.residue.source-hedge",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.opener.runup",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.opener.arguing",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.hedge.fake-inference",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.rhythm.fake-reaction",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      },
+      {
+        "id": "zh-TW.translationese.as-a",
+        "human": 0,
+        "chatgpt": 0,
+        "ratio": null
+      }
+    ]
+  }
+}

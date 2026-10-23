@@ -1,0 +1,127 @@
+{
+ "pack": "common",
+ "version": "0.1.0",
+ "updated": "2026-10-23",
+ "rules": [
+  {
+   "id": "common.residue.utm-source",
+   "category": "residue",
+   "confidence": "high",
+   "regex": "\\b(?:utm_source=(?:chatgpt\\.com|openai|copilot\\.com)|referrer=grok\\.com)",
+   "flags": "i",
+   "message": {
+    "en": "A tracking parameter that a chatbot added to a link.",
+    "zh-TW": "聊天機器人加在連結上的追蹤參數。"
+   },
+   "hint": {
+    "en": "Delete the parameter from the URL. It means the link was pasted straight from a chat window.",
+    "zh-TW": "把參數從網址刪掉。這代表連結是從聊天視窗原樣貼過來的。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "utm_source="
+   },
+   "examples": {
+    "flag": [
+     "Read more at https://example.com/post?utm_source=chatgpt.com today.",
+     "Source: https://example.com/a?utm_source=openai",
+     "See https://example.com/b?utm_source=copilot.com for details.",
+     "Details at https://example.com/c?referrer=grok.com"
+    ],
+    "pass": [
+     "Marketing teams track the utm_source parameter in analytics.",
+     "He cited [1] and [2] in the footnotes.",
+     "Set utm_source=newsletter on every campaign link."
+    ]
+   }
+  },
+  {
+   "id": "common.residue.placeholder",
+   "category": "residue",
+   "confidence": "high",
+   "regex": "\\[(?:Your|Insert|Company|Recipient|Hiring Manager|Client|Customer|Brand|Product)\\b[^\\]\\n]{0,40}\\]|【(?:你的|您的|公司|收件人|姓名|日期|插入|此處|在此)[^】\\n]{0,20}】",
+   "message": {
+    "en": "A template placeholder that nobody filled in.",
+    "zh-TW": "沒有被填寫的範本佔位符。"
+   },
+   "hint": {
+    "en": "Replace it with the real name, date or link, or delete the line.",
+    "zh-TW": "換成真正的姓名、日期或連結，或整行刪掉。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Phrasal templates and placeholder text"
+   },
+   "examples": {
+    "flag": [
+     "Dear [Hiring Manager],",
+     "Best regards, [Your Name]",
+     "Our offer ends on [Insert date here].",
+     "敬請聯絡【您的姓名】。"
+    ],
+    "pass": [
+     "Press [Enter] to continue.",
+     "The note says [sic] after the quote.",
+     "See reference [12]."
+    ]
+   }
+  },
+  {
+   "id": "common.format.markdown-bold",
+   "category": "format",
+   "confidence": "low",
+   "regex": "\\*\\*[^*\\n]{2,60}\\*\\*",
+   "minCount": 3,
+   "message": {
+    "en": "Several **bold** spans in plain text, a habit of chat output that bolds every key phrase.",
+    "zh-TW": "純文字裡出現多處 **粗體** 標記，是聊天輸出常見的習慣。"
+   },
+   "hint": {
+    "en": "Keep bold for a real heading or one warning. Drop the stars on ordinary phrases.",
+    "zh-TW": "粗體只留給標題或一則警告，一般詞句把星號拿掉。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Overuse of boldface"
+   },
+   "examples": {
+    "flag": [
+     "We offer **fast delivery**, **low prices** and **friendly support** to every customer."
+    ],
+    "pass": [
+     "Use ** for multiplication in Python, as in 2 ** 8.",
+     "We offer **one** thing."
+    ]
+   }
+  },
+  {
+   "id": "common.format.emoji-lead",
+   "category": "format",
+   "confidence": "low",
+   "regex": "^[ \\t]*\\p{Extended_Pictographic}️?[ \\t]+\\S",
+   "flags": "m",
+   "minCount": 2,
+   "message": {
+    "en": "Lines that start with an emoji, a chat habit for headings and bullets.",
+    "zh-TW": "以表情符號開頭的行，是聊天輸出用來當標題或項目符號的習慣。"
+   },
+   "hint": {
+    "en": "Use plain headings and bullets. Keep an emoji only when it carries meaning.",
+    "zh-TW": "改用一般標題與項目符號，表情符號只在有意義時才留。"
+   },
+   "source": {
+    "id": "wp-signs",
+    "anchor": "Emoji as formatting"
+   },
+   "examples": {
+    "flag": [
+     "🚀 Launch day\n✅ Fast setup\n💡 Simple pricing"
+    ],
+    "pass": [
+     "🚀 Launch day is Friday.",
+     "We shipped it 🎉 on time.\nThe team celebrated."
+    ]
+   }
+  }
+ ]
+}

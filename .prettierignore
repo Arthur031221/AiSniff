@@ -1,0 +1,12 @@
+node_modules
+dist
+*.tsbuildinfo
+test-results
+playwright-report
+.DS_Store
+.tmp
+tmp
+package-lock.json
+rules/*.json
+assets/*.svg
+src/engine/s2t-table.ts

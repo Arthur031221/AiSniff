@@ -1,0 +1,94 @@
+{
+ "sources": {
+  "wp-signs": {
+   "title": "Wikipedia: Signs of AI writing",
+   "url": "https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing",
+   "kind": "reference",
+   "accessed": "2026-10-23"
+  },
+  "blader-humanizer": {
+   "title": "blader/humanizer SKILL.md (pattern list, MIT)",
+   "url": "https://github.com/blader/humanizer/blob/main/SKILL.md",
+   "kind": "community-list",
+   "accessed": "2026-10-23"
+  },
+  "kobak-2025": {
+   "title": "Kobak et al., Delving into LLM-assisted writing in biomedical publications through excess vocabulary, Science Advances 2025",
+   "url": "https://www.science.org/doi/10.1126/sciadv.adt3813",
+   "kind": "study",
+   "accessed": "2026-10-23"
+  },
+  "hztw": {
+   "title": "kevintsai1202/Humanizer-zh-TW SKILL.md (pattern list, MIT)",
+   "url": "https://github.com/kevintsai1202/Humanizer-zh-TW/blob/main/SKILL.md",
+   "kind": "community-list",
+   "accessed": "2026-10-23"
+  },
+  "shtw": {
+   "title": "Raymondhou0917/speak-human-tw SKILL.md (pattern list, MIT)",
+   "url": "https://github.com/Raymondhou0917/speak-human-tw/blob/master/SKILL.md",
+   "kind": "community-list",
+   "accessed": "2026-10-23"
+  },
+  "zhwiki-ouhua": {
+   "title": "Chinese Wikipedia: 歐化中文",
+   "url": "https://zh.wikipedia.org/wiki/歐化中文",
+   "kind": "reference",
+   "accessed": "2026-10-23"
+  }
+ },
+ "categories": {
+  "residue": {
+   "en": "Chatbot leftovers",
+   "zh-TW": "聊天機器人殘留"
+  },
+  "opener": {
+   "en": "Filler openers",
+   "zh-TW": "罐頭開場"
+  },
+  "significance": {
+   "en": "Inflated significance",
+   "zh-TW": "拔高意義"
+  },
+  "vocabulary": {
+   "en": "AI vocabulary",
+   "zh-TW": "AI 慣用詞"
+  },
+  "contrast": {
+   "en": "Not X but Y",
+   "zh-TW": "不是 X 而是 Y"
+  },
+  "hedge": {
+   "en": "Stance vacuum",
+   "zh-TW": "立場真空"
+  },
+  "authority": {
+   "en": "Vague authority",
+   "zh-TW": "空泛的權威"
+  },
+  "closer": {
+   "en": "Canned closers",
+   "zh-TW": "罐頭收尾"
+  },
+  "promo": {
+   "en": "Brochure language",
+   "zh-TW": "宣傳文案腔"
+  },
+  "rhythm": {
+   "en": "Formula rhythm",
+   "zh-TW": "公式化節奏"
+  },
+  "format": {
+   "en": "Formatting habits",
+   "zh-TW": "排版習慣"
+  },
+  "translationese": {
+   "en": "Translationese",
+   "zh-TW": "翻譯腔"
+  },
+  "wording": {
+   "en": "Wording",
+   "zh-TW": "用語"
+  }
+ }
+}

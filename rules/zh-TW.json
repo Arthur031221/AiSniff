@@ -1,0 +1,749 @@
+{
+ "pack": "zh-TW",
+ "version": "0.1.0",
+ "updated": "2026-10-23",
+ "defs": {
+  "abs": "(?:創新|突破|全新的?可能|協作|卓越|高效|穩定|安全|品質|效率|成長|整合|智慧|永續|透明|信任)"
+ },
+ "rules": [
+  {
+   "id": "zh-TW.residue.ai-self",
+   "category": "residue",
+   "confidence": "high",
+   "regex": "(?:作為|身為)(?:一個|一名)?\\s?(?:AI|人工智慧|大型)?\\s?語言模型|知識截止(?:日期|時間)|(?:很)?抱歉[，,]我(?:無法|不能)(?:協助|幫助|提供)|我沒有(?:即時|實時)(?:的)?(?:資料|資訊|網路)",
+   "message": {
+    "en": "The text talks like a chatbot about itself.",
+    "zh-TW": "文字用聊天機器人的口吻談論自己。"
+   },
+   "hint": {
+    "en": "Delete the sentence. A person would not write it in a finished piece.",
+    "zh-TW": "整句刪掉。成稿裡不會有人這樣寫。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "作為一個 AI 語言模型，我無法瀏覽網頁。",
+     "截至我的知識截止日期，尚無相關資料。",
+     "很抱歉，我無法協助這個要求。"
+    ],
+    "pass": [
+     "這個語言模型有七十億個參數。",
+     "我對這一帶的認識只限於兩次拜訪。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.residue.offer",
+   "category": "residue",
+   "confidence": "high",
+   "regex": "希望(?:這|这)對(?:你|您)有幫助|以下是(?:修改|改寫|優化|潤飾)後的(?:版本|內容)|感謝(?:您|你)的來信|如果(?:你|您)需要[，,]我可以(?:再|進一步)",
+   "fix": {
+    "delete": true
+   },
+   "message": {
+    "en": "A line that belongs to a chat window or a service desk.",
+    "zh-TW": "這是聊天視窗或客服櫃檯才會有的句子。"
+   },
+   "hint": {
+    "en": "Cut it. In a finished text the writer has no next turn.",
+    "zh-TW": "刪掉。成稿裡作者沒有下一輪對話可以接。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "希望這對你有幫助！",
+     "以下是修改後的版本：",
+     "感謝您的來信，我們已收到。",
+     "如果你需要，我可以再擴寫。"
+    ],
+    "pass": [
+     "我希望明年能去京都。",
+     "修改後的版本已上傳到雲端。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.residue.sycophancy",
+   "category": "residue",
+   "confidence": "medium",
+   "regex": "好問題[！!]|(?:這|这)是(?:一個|個)?(?:很好|非常好|極好)的問題",
+   "message": {
+    "en": "Praise for the question, a chat reflex.",
+    "zh-TW": "稱讚提問，是聊天時的反射動作。"
+   },
+   "hint": {
+    "en": "Drop the praise and start with the answer.",
+    "zh-TW": "把讚美拿掉，直接從答案開始。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "好問題！這是匯出功能的說明。",
+     "這是一個很好的問題，答案取決於你的設定。"
+    ],
+    "pass": [
+     "這道題目出得好，學生都答對了。",
+     "問題在於預算。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.residue.source-hedge",
+   "category": "residue",
+   "confidence": "medium",
+   "regex": "現有(?:資料|資訊)(?:沒有|並未)記載|(?:可用|現有|公開)的(?:資料|資訊)(?:確實)?(?:比較|相當|十分)?有限|根據(?:現有|提供的)(?:資料|資訊)",
+   "message": {
+    "en": "A hedge about what the sources say, written as if the writer could not look.",
+    "zh-TW": "一句關於資料說了什麼的保留語，好像作者沒辦法去查。"
+   },
+   "hint": {
+    "en": "Name the source you used, or check it and state the fact.",
+    "zh-TW": "寫出你用的來源，或自己查過後直接陳述事實。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "現有資料沒有記載公司的成立日期。",
+     "關於這一點，可用的資訊確實比較有限。",
+     "根據現有資料，目前沒有公開的數據。"
+    ],
+    "pass": [
+     "公司的成立日期記載於一九九八年的登記文件。",
+     "這份資料有限公司負責整理。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.opener.era-hat",
+   "category": "opener",
+   "confidence": "medium",
+   "regex": "在(?:當今|当今|現今)[^，。\\n]{0,8}(?:時代|世界|社會)|隨著\\s?(?:AI|人工智慧|科技|技術|網路)[^，。\\n]{0,6}(?:快速|飛速|不斷|持續)?(?:發展|進步|普及)|在[^，。\\n]{0,8}不斷發展的時代背景下",
+   "message": {
+    "en": "A scene-setting opener that fits any topic.",
+    "zh-TW": "適用任何主題的時代大帽子開場。"
+   },
+   "hint": {
+    "en": "Start with the concrete thing the piece is about.",
+    "zh-TW": "從這篇文章真正要談的具體事物開始。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "在當今瞬息萬變的時代，時間管理比以往更重要。",
+     "隨著 AI 快速發展，寫作方式也在改變。",
+     "在技術不斷發展的時代背景下，本文討論文稿校對。"
+    ],
+    "pass": [
+     "隨著檔案數量增加，檢索時間也在增長。",
+     "今天瞬間下起大雨。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.opener.runup",
+   "category": "opener",
+   "confidence": "medium",
+   "regex": "(?:接下來)?讓我們(?:一起)?(?:深入|來)(?:看看|了解|探討)|以下是(?:你|您)需要知道的",
+   "message": {
+    "en": "A run-up sentence that announces the point instead of making it.",
+    "zh-TW": "一句預告重點、而不是直接講重點的鋪陳。"
+   },
+   "hint": {
+    "en": "Delete the run-up and say the point.",
+    "zh-TW": "刪掉鋪陳，直接講重點。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "接下來讓我們深入看看快取的作用。",
+     "以下是你需要知道的重點。"
+    ],
+    "pass": [
+     "說實話，我還沒想好。",
+     "接下來是午餐時間。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.opener.arguing",
+   "category": "opener",
+   "confidence": "low",
+   "regex": "(?:不要|別)誤會[，,]我(?:並)?不是",
+   "message": {
+    "en": "An argument against a reader who never said anything.",
+    "zh-TW": "在跟一個沒開口的讀者辯論。"
+   },
+   "hint": {
+    "en": "Cut the denial and state what you mean.",
+    "zh-TW": "刪掉否認的部分，直接說你的意思。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "不要誤會，我並不是在製造焦慮。",
+     "別誤會，我不是要批評誰。"
+    ],
+    "pass": [
+     "這項措施不能防止斷電，但可以減少斷電後的資料損失。",
+     "他不要誤會的時候，通常很快就懂了。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.significance.stock",
+   "category": "significance",
+   "confidence": "medium",
+   "regex": "標誌著|象徵著|見證了|彰顯了|體現了|奠定了?(?:堅實的)?基礎|開啟了?新篇章",
+   "message": {
+    "en": "A stock verb that lifts an ordinary event into a milestone.",
+    "zh-TW": "把普通事件拉成里程碑的慣用動詞。"
+   },
+   "hint": {
+    "en": "Say what happened. If it mattered, the fact shows it.",
+    "zh-TW": "寫出發生了什麼。如果真的重要，事實自己會說明。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "團隊在週三開放了檔案匯出，標誌著協作新時代的到來。",
+     "頁面提供全文搜尋，彰顯了團隊對創新的不懈追求。",
+     "這座橋見證了小鎮的變遷，象徵著堅韌。"
+    ],
+    "pass": [
+     "這是團隊第一次公開發布這個工具。",
+     "他在橋上做了標誌。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.significance.vocab",
+   "category": "vocabulary",
+   "confidence": "medium",
+   "regex": "賦能|至關重要|深入探討|無縫(?:體驗|銜接|整合|連接)|閉環",
+   "fix": {
+    "map": {
+     "賦能": "幫助",
+     "至關重要": "很重要",
+     "深入探討": "討論"
+    }
+   },
+   "message": {
+    "en": "A word that Chinese lists of AI tells name again and again.",
+    "zh-TW": "中文 AI 特徵清單一再點名的詞。"
+   },
+   "hint": {
+    "en": "Use the plain word. 賦能 becomes 幫助, 至關重要 becomes 很重要.",
+    "zh-TW": "改用平白的詞。賦能改成幫助，至關重要改成很重要。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "本文將深入探討一個至關重要的問題。",
+     "這個平台為企業賦能，打造無縫體驗與閉環。"
+    ],
+    "pass": [
+     "這條管線使用無縫鋼管。",
+     "他深入山裡探勘。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.contrast.not-just",
+   "category": "contrast",
+   "confidence": "medium",
+   "regex": "(?:這|它|那)(?:不僅僅是|不僅是|不只是|並非只是|不是)[^，。；\\n]{2,18}[，,](?:而是|更是|更像是|也是)",
+   "message": {
+    "en": "A 'not just X but Y' frame that sets up a contrast nobody asked for.",
+    "zh-TW": "「不只 X 而是 Y」的句型，造了一個沒人問的對比。"
+   },
+   "hint": {
+    "en": "State Y alone. Keep X only if someone actually claimed it.",
+    "zh-TW": "只寫 Y。X 只有在真有人主張時才保留。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "這不僅是一個匯出按鈕，更是通往高效工作的全新入口。",
+     "它不只是工具，而是一種生活方式。",
+     "這不是一次更新，而是效率的飛躍。"
+    ],
+    "pass": [
+     "錯誤發生在儲存階段，而不是上傳階段。",
+     "他不只買了書，也買了筆。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.hedge.fence-sitting",
+   "category": "hedge",
+   "confidence": "low",
+   "regex": "各有優缺點|因人而異|取決於(?:多方面|多個|許多)(?:的)?因素",
+   "message": {
+    "en": "A both-sides line that takes no side.",
+    "zh-TW": "兩邊都說、卻不站任何一邊的句子。"
+   },
+   "hint": {
+    "en": "Pick a side for this case and say why, or give the condition that decides it.",
+    "zh-TW": "針對這個情況選邊並說明理由，或寫出決定結果的條件。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "兩種方案各有優缺點，最終因人而異。",
+     "這取決於多方面因素。"
+    ],
+    "pass": [
+     "兩種方案的優缺點列在表二。",
+     "這取決於記憶體大小，超過八 GB 就用方案甲。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.hedge.stacked",
+   "category": "hedge",
+   "confidence": "medium",
+   "regex": "(?:也許|或許|可能|大概)(?:也許|或許|可能|大概|有可能)(?:會)?",
+   "message": {
+    "en": "Hedges stacked in one sentence.",
+    "zh-TW": "一個句子裡疊了多個保留語。"
+   },
+   "hint": {
+    "en": "Keep one hedge, or none, and give the evidence.",
+    "zh-TW": "保留一個保留語或完全不用，再給出證據。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "這項調整也許可能會減少讀取時間，目前尚未驗證。",
+     "這或許可能有助於改善效果。"
+    ],
+    "pass": [
+     "只在快取開啟時可能有效，結果尚未驗證。",
+     "也許明天會下雨。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.hedge.fake-inference",
+   "category": "hedge",
+   "confidence": "low",
+   "regex": "這意味著(?:使用者|用戶|市場|大眾|人們|我們)(?:對|正在|已經|將)",
+   "message": {
+    "en": "A 'this means' that leaps to a bigger claim.",
+    "zh-TW": "一句「這意味著」，跳到更大的結論。"
+   },
+   "hint": {
+    "en": "Show the step in between, or drop the inference.",
+    "zh-TW": "寫出中間的推理步驟，或刪掉這個推論。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "銷量上升了。這意味著使用者對新版本非常滿意。"
+    ],
+    "pass": [
+     "這個符號意味著停止。",
+     "合約意味著雙方的義務。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.authority.experts",
+   "category": "authority",
+   "confidence": "medium",
+   "regex": "(?:業界|行業|不少|一些|許多|多數)?(?:未具名的)?專家(?:學者)?(?:都)?認為|研究(?:顯示|表明|指出|發現)(?=[，,])|有研究(?:顯示|指出)",
+   "message": {
+    "en": "An unnamed authority is used to carry a claim.",
+    "zh-TW": "用一個沒有名字的權威來撐一個主張。"
+   },
+   "hint": {
+    "en": "Name the expert, the study or the date, or drop the claim.",
+    "zh-TW": "寫出專家、研究或日期的名字，否則刪掉這個主張。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "業界專家認為，這個市場會持續成長。",
+     "研究顯示，這項設計可以減少誤操作。",
+     "一些未具名的專家認為效果顯著。"
+    ],
+    "pass": [
+     "林教授認為這個市場會成長。",
+     "表三的研究顯示了差距，樣本為 120 人。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.promo.paradise",
+   "category": "promo",
+   "confidence": "medium",
+   "regex": "堪稱[^，。\\n]{1,10}(?:天堂|聖地|典範)|獨特魅力|不可錯過的|必訪之地|獨具匠心",
+   "message": {
+    "en": "Brochure language for a place or a product.",
+    "zh-TW": "描述地點或產品的宣傳冊語氣。"
+   },
+   "hint": {
+    "en": "Say where it is and what is in it, with figures.",
+    "zh-TW": "寫出位置與裡面有什麼，附上數字。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "這家咖啡館位於台北市中心，堪稱咖啡愛好者的夢想天堂。",
+     "這裡擁有獨特魅力，是不可錯過的必訪之地。"
+    ],
+    "pass": [
+     "這家咖啡館位於台北市中心，有二十個座位。",
+     "他的夢想是開一家咖啡館。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.closer.summary",
+   "category": "closer",
+   "confidence": "medium",
+   "regex": "總的來說|總而言之|綜上所述|讓我們拭目以待|(?:讓我們)?一起(?:邁向|迎接|期待)",
+   "message": {
+    "en": "A closer that restates the piece with a label.",
+    "zh-TW": "貼著標籤把全文重述一次的收尾。"
+   },
+   "hint": {
+    "en": "End on the last real point, or on what the reader should do.",
+    "zh-TW": "結束在最後一個實質論點，或讀者該做的事。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "總的來說，遠端工作有利有弊。",
+     "總而言之，讓我們拭目以待。",
+     "綜上所述，這個方案值得推廣。"
+    ],
+    "pass": [
+     "團隊總共來了十二個人。",
+     "兩種方案都無法滿足離線需求，暫不採用。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.closer.future",
+   "category": "closer",
+   "confidence": "medium",
+   "regex": "未來充滿(?:無限)?(?:可能|希望|機遇)|期待更多可能|無限可能|邁向美好未來",
+   "message": {
+    "en": "A closer that points at a bright future without saying how.",
+    "zh-TW": "指向光明未來、卻沒說怎麼走的收尾。"
+   },
+   "hint": {
+    "en": "Name the next concrete step, the date or the owner.",
+    "zh-TW": "寫出下一個具體步驟、日期或負責人。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "未來充滿無限可能。",
+     "期待更多可能，讓我們共同邁向美好未來。"
+    ],
+    "pass": [
+     "未來一週會下雨。",
+     "團隊計畫在週五繼續測試。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.rhythm.ordinal",
+   "category": "rhythm",
+   "confidence": "low",
+   "regex": "(首先)[\\s\\S]{1,200}?(其次)[\\s\\S]{1,200}?(最後)",
+   "highlight": "groups",
+   "message": {
+    "en": "The 'first, second, finally' scaffold.",
+    "zh-TW": "「首先、其次、最後」的骨架。"
+   },
+   "hint": {
+    "en": "Use it for real steps. For an argument, drop the labels and let the order carry it.",
+    "zh-TW": "真的是步驟才用。若是論述，拿掉序號，讓順序自己說話。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "首先，我們需要了解背景。其次，要看資料。最後，總結結論。"
+    ],
+    "pass": [
+     "首先打開蓋子，再倒入水。",
+     "最後一班車是十一點。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.rhythm.triad",
+   "category": "rhythm",
+   "confidence": "low",
+   "regex": "{{abs}}[、，]{{abs}}(?:[、，]|和|與|及|以及){{abs}}",
+   "message": {
+    "en": "Three abstract nouns in a row, the rule of three.",
+    "zh-TW": "連續三個抽象名詞，三段式。"
+   },
+   "hint": {
+    "en": "Pick the one that is true for this case and give an example.",
+    "zh-TW": "挑出對這個情況為真的那一個，並舉例。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "這次更新帶來了創新、突破和全新的可能。",
+     "我們重視創新、協作與卓越。"
+    ],
+    "pass": [
+     "它新增匯出、搜尋和批次重新命名。",
+     "匯出、搜尋和批次重新命名是三個不同的功能。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.rhythm.quad",
+   "category": "rhythm",
+   "confidence": "low",
+   "regex": "[一-鿿]{4}、[一-鿿]{4}、[一-鿿]{4}",
+   "message": {
+    "en": "Three four-character phrases in a row.",
+    "zh-TW": "連續三組四字詞。"
+   },
+   "hint": {
+    "en": "Keep the one that carries the claim and add a figure.",
+    "zh-TW": "留下真正有主張的那一組，並補上數字。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "該方案穩定可靠、快速回應、易於維護。"
+    ],
+    "pass": [
+     "數量不變、順序不變。",
+     "該方案在一百次測試中失敗兩次。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.rhythm.fake-reaction",
+   "category": "rhythm",
+   "confidence": "medium",
+   "regex": "我愣了一下|沉默(?:了)?(?:幾秒|片刻|良久)|看著(?:螢幕|屏幕)沒說話",
+   "message": {
+    "en": "A canned reaction shot, an emotion acted out in a stock phrase.",
+    "zh-TW": "罐頭反應鏡頭，用現成片語演出的情緒。"
+   },
+   "hint": {
+    "en": "Write the specific thing the person did or noticed.",
+    "zh-TW": "寫出這個人實際做了或注意到的具體事情。"
+   },
+   "source": {
+    "id": "shtw"
+   },
+   "examples": {
+    "flag": [
+     "看到結果，我愣了一下。",
+     "沉默幾秒，他看著螢幕沒說話。"
+    ],
+    "pass": [
+     "他愣在門口，手裡還拿著鑰匙。",
+     "會議沉默了很久，因為沒有人帶資料。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.format.quotes",
+   "category": "format",
+   "confidence": "low",
+   "regex": "\"[^\"\\n]{1,40}\"",
+   "highlight": "match",
+   "message": {
+    "en": "Straight double quotes in Chinese text. Taiwan prose uses 「」 outside and 『』 inside.",
+    "zh-TW": "中文裡用了直引號。台灣正文以「」為外層、『』為內層。"
+   },
+   "hint": {
+    "en": "Switch to 「」. Use 『』 for a quote inside a quote.",
+    "zh-TW": "改用「」。引號裡的引號用『』。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "他說\"專案進展順利\"，但其他人不同意。"
+    ],
+    "pass": [
+     "他說「專案進展順利」，但其他人不同意。",
+     "他說“專案進展順利”，但其他人不同意。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.translationese.one-of",
+   "category": "translationese",
+   "confidence": "low",
+   "regex": "最[一-鿿]{1,8}的[一-鿿]{1,6}之一",
+   "message": {
+    "en": "'One of the most' is a calque from English that hedges while it praises.",
+    "zh-TW": "「最……之一」是英文的直譯，一邊稱讚一邊保留。"
+   },
+   "hint": {
+    "en": "Say what it is, or give the rank.",
+    "zh-TW": "直接說它是什麼，或給出名次。"
+   },
+   "source": {
+    "id": "zhwiki-ouhua",
+    "anchor": "量詞與代詞的歐化"
+   },
+   "examples": {
+    "flag": [
+     "他是當代最偉大的思想家之一。",
+     "這是最受歡迎的工具之一。"
+    ],
+    "pass": [
+     "他是赫赫有名的人物。",
+     "最後一班車已經開走。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.translationese.as-a",
+   "category": "translationese",
+   "confidence": "low",
+   "regex": "作為(?:一個|一名|一位)[一-鿿]{1,6}[，,]",
+   "fix": {
+    "map": {
+     "作為一個": "身為",
+     "作為一名": "身為",
+     "作為一位": "身為"
+    }
+   },
+   "message": {
+    "en": "'作為一個' translates English 'as a'. 身為 is the native form.",
+    "zh-TW": "「作為一個」是英文 as a 的直譯，道地說法是「身為」。"
+   },
+   "hint": {
+    "en": "Use 身為, or restructure the sentence.",
+    "zh-TW": "改用「身為」，或重組句子。"
+   },
+   "source": {
+    "id": "zhwiki-ouhua",
+    "anchor": "虛詞、介詞與助詞的擴張"
+   },
+   "examples": {
+    "flag": [
+     "作為一個學生，我們應該認真讀書。",
+     "作為一名工程師，他每天寫程式。"
+    ],
+    "pass": [
+     "身為學生，我們應該認真讀書。",
+     "他把這個詞作為例子。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.translationese.do-verb",
+   "category": "translationese",
+   "confidence": "low",
+   "regex": "進行(?:全面|深入|初步|詳細|進一步)?(?:的)?(?:測試|分析|調整|評估|檢查|討論|研究|優化|審查)",
+   "message": {
+    "en": "'進行' plus a verb, a weak verb that turns the real verb into a noun.",
+    "zh-TW": "「進行」加動詞，弱動詞把真正的動詞變成名詞。"
+   },
+   "hint": {
+    "en": "Use the real verb: 測試, not 進行測試.",
+    "zh-TW": "直接用真正的動詞：「測試」，不是「進行測試」。"
+   },
+   "source": {
+    "id": "zhwiki-ouhua",
+    "anchor": "詞彙層面"
+   },
+   "examples": {
+    "flag": [
+     "我們正在對系統進行全面測試，並計畫在週五進行設定調整。"
+    ],
+    "pass": [
+     "我們正在測試系統。",
+     "遊行隊伍沿著大街前進。"
+    ]
+   }
+  },
+  {
+   "id": "zh-TW.wording.mainland",
+   "category": "wording",
+   "confidence": "low",
+   "regex": "視頻|軟件|(?<!人際|社會|關係)網絡|質量(?!守恆)",
+   "raw": true,
+   "fix": {
+    "map": {
+     "視頻": "影片",
+     "軟件": "軟體",
+     "網絡": "網路",
+     "質量": "品質"
+    }
+   },
+   "message": {
+    "en": "Mainland wording. This is a regional choice, not an AI tell.",
+    "zh-TW": "大陸用語。這是地區用字的選擇，不是 AI 的特徵。"
+   },
+   "hint": {
+    "en": "For Taiwan readers use 影片, 品質, 軟體, 網路.",
+    "zh-TW": "給台灣讀者用「影片、品質、軟體、網路」。"
+   },
+   "source": {
+    "id": "hztw"
+   },
+   "examples": {
+    "flag": [
+     "這個視頻的質量很高。",
+     "軟件的網絡需要提升。"
+    ],
+    "pass": [
+     "這支影片的品質很高。",
+     "地球的質量守恆。",
+     "人際網絡很重要。",
+     "这个视频的质量很高。"
+    ]
+   }
+  }
+ ]
+}
