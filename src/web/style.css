@@ -494,7 +494,7 @@ mark.flash {
 }
 
 .popover {
-  position: fixed;
+  position: absolute;
   z-index: 20;
   width: min(340px, calc(100vw - 16px));
   padding: 12px 14px;
@@ -507,6 +507,15 @@ mark.flash {
 
 .popover.pinned {
   border-color: var(--marker);
+}
+
+.popover:focus {
+  outline: none;
+}
+
+.popover:focus-visible {
+  outline: 2px solid var(--marker);
+  outline-offset: 2px;
 }
 
 .card p {

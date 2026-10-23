@@ -1,10 +1,12 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { pickText } from "../engine";
 import type { Confidence, Mark, RuleDef } from "../engine";
 import { createSniffer } from "../engine/packs";
+import { version } from "../../package.json";
 
-const VERSION = "0.1.0";
+const VERSION = version;
 const DISCLAIMER =
   "Measures writing patterns, not authorship. A high density does not show that an AI wrote the text.";
 const CONFIDENCES: Confidence[] = ["low", "medium", "high"];
@@ -14,7 +16,7 @@ Highlights phrases that read like AI wrote them, with the rule, a source and a r
 It reports patterns. It never decides who wrote a text.
 
 Usage
-  aisniff lint [files...]      Scan files, or stdin when no file or "-" is given
+  aisniff lint [paths...]      Scan files and folders, or stdin when no path or "-" is given
   aisniff rules                List every rule
   aisniff explain <rule-id>    Show one rule with its examples and source
 
@@ -23,16 +25,53 @@ Options for lint
   --min-confidence low|medium|high
                                Hide weaker rules (default low)
   --max-density N              Exit 1 when hits per 1,000 units exceed N
+  --max-weighted-density N     Exit 1 when the weighted density exceeds N (the web meter's scale)
+  --disable ID                 Skip one rule, or every rule under a prefix (en.promo).
+                               Repeat the flag to skip several
   --lang auto|en|zh-TW         Rule packs to load (default auto)
   --locale CODE                Language of the messages (default en)
   -h, --help                   Show this help
   -v, --version                Show the version
 
 Exit codes
-  0 scanned, within the limit   1 --max-density exceeded   2 bad usage
+  0 scanned, within the limits   1 a density limit exceeded   2 bad usage
 `;
 
 class UsageError extends Error {}
+
+const TEXT_FILE = /\.(md|markdown|mdx|txt)$/i;
+
+/** Files under a folder, sorted, skipping dot folders, node_modules and symlinks. */
+function walk(dir: string): string[] {
+  const out: string[] = [];
+  const entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+    a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+  );
+  for (const entry of entries) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!entry.name.startsWith(".") && entry.name !== "node_modules") out.push(...walk(path));
+    } else if (entry.isFile() && TEXT_FILE.test(entry.name)) out.push(path);
+  }
+  return out;
+}
+
+function expandPaths(paths: string[]): string[] {
+  return paths.flatMap((path) => {
+    if (path === "-") return [path];
+    let isDir = false;
+    try {
+      isDir = statSync(path).isDirectory();
+    } catch {
+      return [path];
+    }
+    if (!isDir) return [path];
+    const found = walk(path);
+    if (found.length === 0)
+      throw new UsageError(`no .md, .markdown, .mdx or .txt files in ${path}`);
+    return found;
+  });
+}
 
 const escapeData = (s: string) =>
   s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
@@ -93,6 +132,8 @@ function lint(args: string[]): number {
       format: { type: "string", default: "text" },
       "min-confidence": { type: "string", default: "low" },
       "max-density": { type: "string" },
+      "max-weighted-density": { type: "string" },
+      disable: { type: "string", multiple: true },
       lang: { type: "string", default: "auto" },
       locale: { type: "string", default: "en" },
     },
@@ -104,15 +145,30 @@ function lint(args: string[]): number {
   if (!CONFIDENCES.includes(floor)) throw new UsageError(`unknown --min-confidence ${floor}`);
   const lang = values.lang as "auto" | "en" | "zh-TW";
   if (!["auto", "en", "zh-TW"].includes(lang)) throw new UsageError(`unknown --lang ${lang}`);
-  const limit = values["max-density"] === undefined ? undefined : Number(values["max-density"]);
-  if (limit !== undefined && !Number.isFinite(limit))
-    throw new UsageError("--max-density needs a number");
+  const limitOf = (name: "max-density" | "max-weighted-density") => {
+    const raw = values[name];
+    if (raw === undefined) return undefined;
+    const n = raw.trim() === "" ? NaN : Number(raw);
+    if (!Number.isFinite(n)) throw new UsageError(`--${name} needs a number`);
+    return n;
+  };
+  const limit = limitOf("max-density");
+  const weightedLimit = limitOf("max-weighted-density");
 
   const sniffer = createSniffer(lang);
-  const files = positionals.length ? positionals : ["-"];
+  const disabled = new Set<string>();
+  for (const selector of values.disable ?? []) {
+    const ids = sniffer.select(selector);
+    if (ids.length === 0)
+      throw new UsageError(
+        `--disable ${selector} matches no rule. Run "aisniff rules" for the list`,
+      );
+    for (const id of ids) disabled.add(id);
+  }
+  const files = expandPaths(positionals.length ? positionals : ["-"]);
   const reports = files.map((file) => {
     const text = readInput(file);
-    const analysis = sniffer.analyze(text, floor);
+    const analysis = sniffer.analyze(text, floor, disabled);
     const marks = analysis.marks.map((m) => describe(m, text, sniffer, values.locale as string));
     return { file: file === "-" ? "<stdin>" : file, stats: analysis.stats, marks };
   });
@@ -146,8 +202,12 @@ function lint(args: string[]): number {
     if (format === "text") console.log(DISCLAIMER);
   }
   const over = limit !== undefined && reports.some((r) => r.stats.density > limit);
+  const overWeighted =
+    weightedLimit !== undefined && reports.some((r) => r.stats.weightedDensity > weightedLimit);
   if (over) console.error(`aisniff: density above the limit of ${limit} per 1,000 units`);
-  return over ? 1 : 0;
+  if (overWeighted)
+    console.error(`aisniff: weighted density above the limit of ${weightedLimit} per 1,000 units`);
+  return over || overWeighted ? 1 : 0;
 }
 
 function listRules(args: string[]): number {

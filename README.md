@@ -29,7 +29,7 @@ Hit counts come from `aisniff lint` run on these exact sentences. I rewrote the 
 
 On answers held out from HC3 (a public set of questions with human and chatbot answers), the English rules marked at least one phrase in **29% of chatbot answers and 2% of human answers**. For Chinese it was 24% and 6%.
 
-Mind the limits. The test half holds 23,752 human and 13,422 chatbot English answers, and 9,812 and 8,480 Chinese ones. The chatbot answers date from its first months, so the newer-model vocabulary rules can't be checked on them. 71% of the English chatbot answers had no hit at all. The AUROC of the density is 0.63 for English and 0.59 for Chinese, which makes density alone a weak detector. Several rules fire as often on human answers as on chatbot ones, and the page lists them. Method and per-rule counts are in [docs/evaluation.md](docs/evaluation.md). Rerun it with `npm run eval`.
+The limits matter. The test half holds 23,752 human and 13,422 chatbot English answers, and 9,812 and 8,480 Chinese ones. The chatbot answers date from its first months, so the rules for newer-model vocabulary can't be checked against them. 71% of the English chatbot answers had no hit at all. The AUROC of the density is 0.63 for English and 0.59 for Chinese, so density alone is a weak detector. Several rules fire as often on human answers as on chatbot ones, and the evaluation page lists them. Method and per-rule counts are in [docs/evaluation.md](docs/evaluation.md). Rerun it with `npm run eval`.
 
 ## Commands
 
@@ -37,17 +37,20 @@ Mind the limits. The test half holds 23,752 human and 13,422 chatbot English ans
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| Command                                | What it does                                                                                                    |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `aisniff lint [files...]`              | Scans files, or stdin when no file is given. Prints each hit with position, confidence, rule, message and hint. |
-| `aisniff lint --format json`           | Same hits as JSON, with source URLs, counts per type and the density.                                           |
-| `aisniff lint --format github`         | One GitHub Actions annotation per hit.                                                                          |
-| `aisniff lint --min-confidence medium` | Hides weak signals. Values: `low`, `medium`, `high`.                                                            |
-| `aisniff lint --max-density 20`        | Exits 1 when hits per 1,000 units are above the number.                                                         |
-| `aisniff lint --lang en`               | Loads one pack. Values: `auto`, `en`, `zh-TW`.                                                                  |
-| `aisniff lint --locale zh-TW`          | Messages and hints in Traditional Chinese.                                                                      |
-| `aisniff rules`                        | Lists all 61 rules with their confidence.                                                                       |
-| `aisniff explain <rule-id>`            | Shows one rule with passing and failing examples and its source.                                                |
+| Command                                   | What it does                                                                                                    |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `aisniff lint [files...]`                 | Scans files, or stdin when no file is given. Prints each hit with position, confidence, rule, message and hint. |
+| `aisniff lint --format json`              | Same hits as JSON, with source URLs, counts per type and the density.                                           |
+| `aisniff lint --format github`            | One GitHub Actions annotation per hit.                                                                          |
+| `aisniff lint --min-confidence medium`    | Hides weak signals. Values: `low`, `medium`, `high`.                                                            |
+| `aisniff lint --max-density 20`           | Exits 1 when hits per 1,000 units are above the number.                                                         |
+| `aisniff lint --max-weighted-density 8.7` | Exits 1 when the weighted density, the scale of the web meter, is above the number.                             |
+| `aisniff lint --disable en.promo`         | Skips one rule, or every rule under a prefix such as `en.promo`. Repeat the flag to skip more.                  |
+| `aisniff lint docs/`                      | Scans a folder and its subfolders for `.md`, `.markdown`, `.mdx` and `.txt` files.                              |
+| `aisniff lint --lang en`                  | Loads one pack. Values: `auto`, `en`, `zh-TW`.                                                                  |
+| `aisniff lint --locale zh-TW`             | Messages and hints in Traditional Chinese.                                                                      |
+| `aisniff rules`                           | Lists all 61 rules with their confidence.                                                                       |
+| `aisniff explain <rule-id>`               | Shows one rule with passing and failing examples and its source.                                                |
 
 Exit codes: 0 scanned within the limit, 1 limit exceeded, 2 bad usage. The text output ends with a line saying it measures patterns, not authorship.
 
@@ -118,7 +121,7 @@ Copy `skills/aisniff/SKILL.md` into your repository and point to it from `AGENTS
 
 Each rule cites one of six public sources: the Wikipedia guide [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), the pattern lists in [blader/humanizer](https://github.com/blader/humanizer), [Humanizer-zh-TW](https://github.com/kevintsai1202/Humanizer-zh-TW) and [speak-human-tw](https://github.com/Raymondhou0917/speak-human-tw), the Chinese Wikipedia page on [Europeanized Chinese](https://zh.wikipedia.org/wiki/%E6%AD%90%E5%8C%96%E4%B8%AD%E6%96%87), and the excess-vocabulary study by [Kobak et al., Science Advances 2025](https://www.science.org/doi/10.1126/sciadv.adt3813). Those lists are prose guides for rewriting. AiSniff turns their patterns into rules, tests them against examples and measures them on data. It also keeps some rules the data doesn't support, and the evaluation page lists each one. Every rule has passing and failing examples that run as tests, and `npm run check:sources` checks that each source link and section exists.
 
-Some wording rules mark mainland usage in Traditional Chinese (for example the mainland words for software and video). They flag wording that differs from Taiwan usage. They are not AI tells.
+Some wording rules mark mainland usage in Traditional Chinese (for example the mainland words for software and video). They flag wording that differs from Taiwan usage. They aren't AI tells.
 
 ## Limits
 

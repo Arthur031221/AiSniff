@@ -33,6 +33,25 @@ const store = {
   },
 };
 
+/** The Check text lives in sessionStorage, so a reload keeps it but a closed tab does not. */
+const draft = {
+  get(): string | null {
+    try {
+      return sessionStorage.getItem("aisniff.draft");
+    } catch {
+      return null;
+    }
+  },
+  set(text: string | null): void {
+    try {
+      if (text === null) sessionStorage.removeItem("aisniff.draft");
+      else sessionStorage.setItem("aisniff.draft", text);
+    } catch {
+      /* private mode or a full quota: the draft just does not survive a reload */
+    }
+  },
+};
+
 let minConfidence: Confidence = "low";
 
 const ruleOf = (mark: Mark) => sniffer.rule(mark.ruleId);
@@ -109,6 +128,7 @@ class Pane {
 
   constructor(label: string, onChange: () => void) {
     this.editor = new MarkedEditor(label, () => {
+      popover.hide();
       this.refresh();
       onChange();
     });
@@ -123,7 +143,10 @@ class Pane {
     area.addEventListener("mouseleave", () => popover.hideSoon());
     area.addEventListener("click", (e) => {
       const i = this.editor.markAt(e.clientX, e.clientY);
-      if (i >= 0) popover.show(this.editor.rectOf(i)!, buildCard(this, i), true);
+      if (i < 0) return;
+      popover.show(this.editor.rectOf(i)!, buildCard(this, i), true);
+      // On a phone the tap also opened the keyboard, which would cover the card.
+      if (matchMedia("(pointer: coarse)").matches) area.blur();
     });
   }
 
@@ -140,9 +163,13 @@ class Pane {
 }
 
 let sampleUntouched = false;
+/** True while the box still holds the sample picked for the interface language. */
+let defaultSample = false;
 
 const check = new Pane(t("tab.check"), () => {
   sampleUntouched = false;
+  defaultSample = false;
+  draft.set(check.text);
   renderCheck();
 });
 const before = new Pane(t("compare.before"), renderCompare);
@@ -205,7 +232,7 @@ function renderPanel(): void {
         );
         button.addEventListener("click", () => {
           check.editor.flash(i);
-          popover.show(check.editor.rectOf(i)!, buildCard(check, i), true);
+          popover.show(check.editor.rectOf(i)!, buildCard(check, i), true, true);
         });
         item.append(button);
         list.append(item);
@@ -292,7 +319,7 @@ async function exportImage(): Promise<void> {
   link.href = URL.createObjectURL(blob);
   link.download = "aisniff.png";
   link.click();
-  URL.revokeObjectURL(link.href);
+  window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 }
 
 function boot(): void {
@@ -314,6 +341,7 @@ function boot(): void {
   select.addEventListener("change", () => {
     setLocale(select.value);
     store.set("lang", select.value);
+    if (defaultSample) check.load(sampleFor(select.value));
     retranslate();
   });
 
@@ -336,11 +364,16 @@ function boot(): void {
       check.load(sample);
       renderCheck();
       sampleUntouched = true;
+      defaultSample = false;
+      draft.set(null);
     });
   }
   $("clear").addEventListener("click", () => {
     check.load("");
     renderCheck();
+    sampleUntouched = false;
+    defaultSample = false;
+    draft.set("");
     check.editor.textarea.focus();
   });
   $<HTMLSelectElement>("filter").addEventListener("change", (e) => {
@@ -358,8 +391,10 @@ function boot(): void {
     if (sampleUntouched) check.editor.textarea.select();
   });
 
-  check.load(sampleFor(locale));
-  sampleUntouched = true;
+  const saved = draft.get();
+  check.load(saved ?? sampleFor(locale));
+  sampleUntouched = saved === null;
+  defaultSample = saved === null;
   retranslate();
 }
 

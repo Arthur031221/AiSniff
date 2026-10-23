@@ -39,17 +39,20 @@ AiSniff 会标出英文和中文文字里，符合已公开记载的 AI 写作�
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| 命令                                   | 作用                                                                       |
-| -------------------------------------- | -------------------------------------------------------------------------- |
-| `aisniff lint [files...]`              | 扫描文件，没有给文件时读标准输入。逐项打印位置、置信度、规则、说明和建议。 |
-| `aisniff lint --format json`           | 同样的结果输出为 JSON，含来源网址、各类型数量和密度。                      |
-| `aisniff lint --format github`         | 每个命中输出一条 GitHub Actions 注解。                                     |
-| `aisniff lint --min-confidence medium` | 隐藏弱信号。可用值：`low`、`medium`、`high`。                              |
-| `aisniff lint --max-density 20`        | 每千单位的命中数超过该数字时以代码 1 退出。                                |
-| `aisniff lint --lang en`               | 只加载一个规则包。可用值：`auto`、`en`、`zh-TW`。                          |
-| `aisniff lint --locale zh-TW`          | 以繁体中文显示说明和建议。                                                 |
-| `aisniff rules`                        | 列出全部 61 条规则及其置信度。                                             |
-| `aisniff explain <rule-id>`            | 显示单条规则、通过和不通过的示例，以及来源。                               |
+| 命令                                      | 作用                                                                                |
+| ----------------------------------------- | ----------------------------------------------------------------------------------- |
+| `aisniff lint [files...]`                 | 扫描文件，没有给文件时读标准输入。逐项打印位置、置信度、规则、说明和建议。          |
+| `aisniff lint --format json`              | 同样的结果输出为 JSON，含来源网址、各类型数量和密度。                               |
+| `aisniff lint --format github`            | 每个命中输出一条 GitHub Actions 注解。                                              |
+| `aisniff lint --min-confidence medium`    | 隐藏弱信号。可用值：`low`、`medium`、`high`。                                       |
+| `aisniff lint --max-density 20`           | 每千单位的命中数超过该数字时以代码 1 退出。                                         |
+| `aisniff lint --max-weighted-density 8.7` | 加权密度（网页仪表使用的刻度）超过该数字时以代码 1 退出。                           |
+| `aisniff lint --disable en.promo`         | 跳过一条规则，或某个前缀（例如 `en.promo`）下的所有规则。重复使用该标志可跳过更多。 |
+| `aisniff lint docs/`                      | 扫描文件夹及其子文件夹中的 `.md`、`.markdown`、`.mdx` 和 `.txt` 文件。              |
+| `aisniff lint --lang en`                  | 只加载一个规则包。可用值：`auto`、`en`、`zh-TW`。                                   |
+| `aisniff lint --locale zh-TW`             | 以繁体中文显示说明和建议。                                                          |
+| `aisniff rules`                           | 列出全部 61 条规则及其置信度。                                                      |
+| `aisniff explain <rule-id>`               | 显示单条规则、通过和不通过的示例，以及来源。                                        |
 
 退出码：0 为扫描完成且未超过上限，1 为超过上限，2 为用法错误。文字输出的最后一行会说明它衡量的是模式，不是作者。
 

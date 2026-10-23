@@ -56,4 +56,4 @@ The skill is one file, `skills/aisniff/SKILL.md`. It tells an agent to run the C
 - run: npx github:Arthur031221/AiSniff lint --format github --max-density 20 docs/*.md
 ```
 
-`--format github` turns each hit into an annotation. `--max-density` fails the job when the density is above the number you choose.
+`--format github` turns each hit into an annotation. `--max-density` fails the job when the density is above the number you choose. `--max-weighted-density` does the same on the weighted scale the web meter uses, where 8.7 is the "many patterns" line for English. Add `--disable en.promo` to skip a rule that does not suit your writing, and pass `docs/` to scan a whole folder.

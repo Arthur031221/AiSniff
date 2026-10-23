@@ -39,17 +39,20 @@ Bitte mit den Grenzen lesen. Die Testhälfte enthält 23.752 menschliche und 13.
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| Befehl                                 | Wirkung                                                                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `aisniff lint [files...]`              | Prüft Dateien, ohne Angabe die Standardeingabe. Gibt jeden Treffer mit Position, Sicherheit, Regel, Meldung und Tipp aus. |
-| `aisniff lint --format json`           | Dieselben Treffer als JSON, mit Quell-URLs, Zahlen je Art und der Dichte.                                                 |
-| `aisniff lint --format github`         | Eine GitHub-Actions-Anmerkung je Treffer.                                                                                 |
-| `aisniff lint --min-confidence medium` | Blendet schwache Signale aus. Werte: `low`, `medium`, `high`.                                                             |
-| `aisniff lint --max-density 20`        | Beendet mit Code 1, wenn die Treffer pro 1.000 Einheiten die Zahl überschreiten.                                          |
-| `aisniff lint --lang en`               | Lädt nur ein Regelpaket. Werte: `auto`, `en`, `zh-TW`.                                                                    |
-| `aisniff lint --locale zh-TW`          | Meldungen und Tipps auf traditionellem Chinesisch.                                                                        |
-| `aisniff rules`                        | Listet alle 61 Regeln mit ihrer Sicherheit.                                                                               |
-| `aisniff explain <rule-id>`            | Zeigt eine Regel mit bestehenden und nicht bestehenden Beispielen und ihrer Quelle.                                       |
+| Befehl                                    | Wirkung                                                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `aisniff lint [files...]`                 | Prüft Dateien, ohne Angabe die Standardeingabe. Gibt jeden Treffer mit Position, Sicherheit, Regel, Meldung und Tipp aus. |
+| `aisniff lint --format json`              | Dieselben Treffer als JSON, mit Quell-URLs, Zahlen je Art und der Dichte.                                                 |
+| `aisniff lint --format github`            | Eine GitHub-Actions-Anmerkung je Treffer.                                                                                 |
+| `aisniff lint --min-confidence medium`    | Blendet schwache Signale aus. Werte: `low`, `medium`, `high`.                                                             |
+| `aisniff lint --max-density 20`           | Beendet mit Code 1, wenn die Treffer pro 1.000 Einheiten die Zahl überschreiten.                                          |
+| `aisniff lint --max-weighted-density 8.7` | Beendet mit Code 1, wenn die gewichtete Dichte, die Skala der Web-Anzeige, die Zahl überschreitet.                        |
+| `aisniff lint --disable en.promo`         | Überspringt eine Regel oder alle Regeln unter einem Präfix wie `en.promo`. Die Option lässt sich wiederholen.             |
+| `aisniff lint docs/`                      | Durchsucht einen Ordner und seine Unterordner nach `.md`-, `.markdown`-, `.mdx`- und `.txt`-Dateien.                      |
+| `aisniff lint --lang en`                  | Lädt nur ein Regelpaket. Werte: `auto`, `en`, `zh-TW`.                                                                    |
+| `aisniff lint --locale zh-TW`             | Meldungen und Tipps auf traditionellem Chinesisch.                                                                        |
+| `aisniff rules`                           | Listet alle 61 Regeln mit ihrer Sicherheit.                                                                               |
+| `aisniff explain <rule-id>`               | Zeigt eine Regel mit bestehenden und nicht bestehenden Beispielen und ihrer Quelle.                                       |
 
 Exit-Codes: 0 geprüft und im Limit, 1 Limit überschritten, 2 falsche Verwendung. Die Textausgabe endet mit einer Zeile, die sagt, dass Muster gemessen werden und keine Urheberschaft.
 

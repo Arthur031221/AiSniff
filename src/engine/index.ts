@@ -55,10 +55,23 @@ export class Sniffer {
     return label;
   }
 
-  analyze(text: string, minConfidence: Confidence = "low"): Analysis {
+  /** Rule ids a selector names: one id, or every rule under a dotted prefix such as `en.promo`. */
+  select(selector: string): string[] {
+    return this.rules
+      .map((r) => r.def.id)
+      .filter((id) => id === selector || id.startsWith(`${selector}.`));
+  }
+
+  analyze(
+    text: string,
+    minConfidence: Confidence = "low",
+    disabled: ReadonlySet<string> = new Set(),
+  ): Analysis {
     const order: Confidence[] = ["low", "medium", "high"];
     const floor = order.indexOf(minConfidence);
-    const active = this.rules.filter((r) => order.indexOf(r.def.confidence) >= floor);
+    const active = this.rules.filter(
+      (r) => order.indexOf(r.def.confidence) >= floor && !disabled.has(r.def.id),
+    );
     const hits = findHits(text, active);
     const rankOf = (id: string) => this.rule(id).confidence;
     const marks = resolveMarks(hits, rankOf);

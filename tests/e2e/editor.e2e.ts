@@ -176,6 +176,61 @@ describe("editor", () => {
     expect(scroll).toBeLessThanOrEqual(client);
   });
 
+  it("keeps a pinned card attached to its mark when the page scrolls", async () => {
+    await typeText(Array(30).fill("In conclusion, the future looks bright.").join("\n\n"));
+    const mark = page.locator("mark").first();
+    const at = (await mark.boundingBox())!;
+    await page.mouse.click(at.x + 4, at.y + at.height / 2);
+    const popover = page.locator(".popover");
+    await popover.waitFor({ state: "visible" });
+    const gap = async () => (await popover.boundingBox())!.y - (await mark.boundingBox())!.y;
+    const before = await gap();
+    await page.mouse.wheel(0, 120);
+    await page.waitForTimeout(150);
+    expect(await gap()).toBeCloseTo(before, 0);
+  });
+
+  it("moves focus into a card opened from the panel and gives it back on Escape", async () => {
+    const row = page.locator(".hit-row").first();
+    await row.focus();
+    await page.keyboard.press("Enter");
+    await page.locator(".popover").waitFor({ state: "visible" });
+    expect(await page.evaluate(() => document.activeElement?.classList.contains("popover"))).toBe(
+      true,
+    );
+    await page.keyboard.press("Escape");
+    expect(await page.locator(".popover").isHidden()).toBe(true);
+    expect(await page.evaluate(() => document.activeElement?.classList.contains("hit-row"))).toBe(
+      true,
+    );
+  });
+
+  it("keeps the text across a reload and drops it when a sample is picked", async () => {
+    await typeText("In conclusion, the future looks bright.");
+    await page.reload();
+    await page.waitForSelector("mark");
+    expect(await page.getByRole("textbox", { name: "Check" }).inputValue()).toBe(
+      "In conclusion, the future looks bright.",
+    );
+    await page.getByRole("button", { name: "English sample" }).click();
+    await page.reload();
+    await page.waitForSelector("mark");
+    expect(await page.locator("mark").count()).toBeGreaterThan(5);
+    await page.getByRole("button", { name: "Clear" }).click();
+    await page.reload();
+    expect(await page.getByRole("textbox", { name: "Check" }).inputValue()).toBe("");
+  });
+
+  it("swaps the default sample with the language but never replaces typed text", async () => {
+    await page.getByRole("combobox", { name: "Language" }).selectOption("zh-TW");
+    expect(await page.getByRole("textbox").first().inputValue()).toMatch(/[一-鿿]/);
+    await page.getByRole("textbox").first().fill("In conclusion, the future looks bright.");
+    await page.getByRole("combobox", { name: /Language|語言/ }).selectOption("en");
+    expect(await page.getByRole("textbox").first().inputValue()).toBe(
+      "In conclusion, the future looks bright.",
+    );
+  });
+
   it("makes no network request after the page has loaded", async () => {
     const requests: string[] = [];
     page.on("request", (r) => requests.push(r.url()));

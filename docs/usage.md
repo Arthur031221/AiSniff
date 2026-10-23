@@ -11,6 +11,8 @@
 7. The Compare tab holds a before and an after text. Press "Start from the current text", edit the right side and read the hit count change.
 8. "Save as image" writes a PNG of the annotated text with the density line.
 
+The text in the Check box stays when you reload the page and is dropped when you close the tab. It is kept in the browser's session storage and never leaves your machine. "Clear" and the example buttons update it too.
+
 The filter next to the buttons hides weaker rules. Medium and strong signals is a good setting for a final pass.
 
 The language menu changes the interface and the rule messages. Rule messages exist in English and Traditional Chinese. The other languages show the closest of those two.
@@ -29,14 +31,19 @@ cat draft.md | aisniff lint          # scan stdin
 aisniff lint --min-confidence medium draft.md
 aisniff lint --format json draft.md  # for scripts
 aisniff lint --format github docs/*.md
+aisniff lint docs/                   # a folder: .md, .markdown, .mdx and .txt files, recursively
+aisniff lint --disable en.promo draft.md   # skip a rule, or every rule under a prefix
 aisniff lint --max-density 20 draft.md
+aisniff lint --max-weighted-density 8.7 draft.md
 aisniff rules                        # every rule
 aisniff explain en.hedge.important-to-note
 ```
 
 Text output prints the position, confidence, rule id and matched text, then the message and the hint. A summary line gives the hit count, the units and the density. The last line always says that the tool measures patterns, not authorship.
 
-Exit codes: 0 when the scan ran and stayed within `--max-density`, 1 when the limit was exceeded, 2 for bad usage.
+Exit codes: 0 when the scan ran and stayed within `--max-density` and `--max-weighted-density`, 1 when either limit was exceeded, 2 for bad usage. A bad usage includes a `--disable` value that matches no rule and a folder with no text files.
+
+`--disable` takes a rule id or a prefix that ends at a dot, so `en.promo` covers `en.promo.commitment` but `en.pro` matches nothing. Use it for rules the evaluation page shows firing as often on human text as on chatbot text. Folders skip dot folders, `node_modules` and symbolic links. A file named on the command line is always read.
 
 ## Agent skill
 

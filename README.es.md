@@ -39,17 +39,20 @@ Lee la cifra con sus límites. La mitad de prueba tiene 23.752 respuestas humana
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| Comando                                | Qué hace                                                                                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `aisniff lint [files...]`              | Analiza archivos, o la entrada estándar si no das ninguno. Imprime cada coincidencia con posición, confianza, regla, mensaje y sugerencia. |
-| `aisniff lint --format json`           | Las mismas coincidencias en JSON, con URL de fuentes, recuentos por tipo y densidad.                                                       |
-| `aisniff lint --format github`         | Una anotación de GitHub Actions por coincidencia.                                                                                          |
-| `aisniff lint --min-confidence medium` | Oculta las señales débiles. Valores: `low`, `medium`, `high`.                                                                              |
-| `aisniff lint --max-density 20`        | Sale con código 1 cuando las coincidencias por 1.000 unidades superan el número.                                                           |
-| `aisniff lint --lang en`               | Carga un solo paquete de reglas. Valores: `auto`, `en`, `zh-TW`.                                                                           |
-| `aisniff lint --locale zh-TW`          | Mensajes y sugerencias en chino tradicional.                                                                                               |
-| `aisniff rules`                        | Lista las 61 reglas con su confianza.                                                                                                      |
-| `aisniff explain <rule-id>`            | Muestra una regla con ejemplos que pasan y que fallan, y su fuente.                                                                        |
+| Comando                                   | Qué hace                                                                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `aisniff lint [files...]`                 | Analiza archivos, o la entrada estándar si no das ninguno. Imprime cada coincidencia con posición, confianza, regla, mensaje y sugerencia. |
+| `aisniff lint --format json`              | Las mismas coincidencias en JSON, con URL de fuentes, recuentos por tipo y densidad.                                                       |
+| `aisniff lint --format github`            | Una anotación de GitHub Actions por coincidencia.                                                                                          |
+| `aisniff lint --min-confidence medium`    | Oculta las señales débiles. Valores: `low`, `medium`, `high`.                                                                              |
+| `aisniff lint --max-density 20`           | Sale con código 1 cuando las coincidencias por 1.000 unidades superan el número.                                                           |
+| `aisniff lint --max-weighted-density 8.7` | Sale con código 1 cuando la densidad ponderada, la escala del medidor web, supera el número.                                               |
+| `aisniff lint --disable en.promo`         | Omite una regla, o todas las de un prefijo como `en.promo`. Repite la opción para omitir más.                                              |
+| `aisniff lint docs/`                      | Recorre una carpeta y sus subcarpetas en busca de archivos `.md`, `.markdown`, `.mdx` y `.txt`.                                            |
+| `aisniff lint --lang en`                  | Carga un solo paquete de reglas. Valores: `auto`, `en`, `zh-TW`.                                                                           |
+| `aisniff lint --locale zh-TW`             | Mensajes y sugerencias en chino tradicional.                                                                                               |
+| `aisniff rules`                           | Lista las 61 reglas con su confianza.                                                                                                      |
+| `aisniff explain <rule-id>`               | Muestra una regla con ejemplos que pasan y que fallan, y su fuente.                                                                        |
 
 Códigos de salida: 0 análisis dentro del límite, 1 límite superado, 2 uso incorrecto. La salida de texto termina con una línea que dice que mide patrones, no autoría.
 

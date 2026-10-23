@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+- CLI: `--disable` skips a rule or a dotted prefix of rules, `lint` accepts folders and scans their `.md`, `.markdown`, `.mdx` and `.txt` files in order, and `--max-weighted-density` gates on the same scale as the web meter. `--max-density` is unchanged. `--version` now reads `package.json`.
+- Web: a pinned card stays attached to its mark when the page scrolls, a card opened from the side panel takes keyboard focus and Escape returns it, tapping a mark on a phone closes the keyboard, and the PNG download no longer races the URL cleanup.
+- Web: the Check text survives a reload in the same tab, and the default sample follows the interface language until you type.
+
 ## 0.1.0
 
 First release.

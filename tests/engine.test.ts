@@ -18,6 +18,18 @@ describe("toTraditional", () => {
 });
 
 describe("analyze", () => {
+  it("skips disabled rules and selects by id or dotted prefix", () => {
+    const text = "In conclusion, it is not just a tool, it is a movement.";
+    expect(sniffer.select("en.closer.in-conclusion")).toEqual(["en.closer.in-conclusion"]);
+    expect(sniffer.select("en.closer").length).toBeGreaterThan(0);
+    expect(sniffer.select("en.clos")).toEqual([]);
+    const off = new Set(sniffer.select("en.closer"));
+    const ids = (disabled?: Set<string>) =>
+      sniffer.analyze(text, "low", disabled).hits.map((h) => h.ruleId);
+    expect(ids()).toContain("en.closer.in-conclusion");
+    expect(ids(off)).not.toContain("en.closer.in-conclusion");
+  });
+
   it("matches Simplified Chinese text and reports offsets in the original", () => {
     const text = "总而言之，这个方案值得推广。";
     const { marks } = sniffer.analyze(text);
