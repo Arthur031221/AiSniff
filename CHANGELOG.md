@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+
+- GitHub Actions: `uses: Arthur031221/AiSniff@v0.5.0` runs the CLI in a workflow, with inputs for `paths`, `format`, `max-density`, `max-weighted-density`, `min-confidence`, `disable`, `lang`, `markdown` and `config`. It fails the job only when a limit is passed. The repository's own CI runs it on its docs.
+- CLI: `-h` and `--help` after a subcommand (`aisniff lint --help`) print the help instead of exiting with an error.
+- Tests: the action script is run against the real CLI for paths, globs, limits and bad input.
+
 ## 0.4.0
 
 - Web: "Open a file" and drag and drop load a `.txt`, `.md`, `.markdown` or `.mdx` file of up to 2 MB into the Check box. The file is read in the browser, a leading byte order mark is dropped, and other types or larger files get a message in the interface language.

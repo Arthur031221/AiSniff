@@ -115,9 +115,11 @@ cp -r AiSniff/skills/aisniff ~/<agent-dir>/skills/aisniff
 <summary>GitHub Actions</summary>
 
 ```yaml
-- uses: actions/setup-node@v4
-  with: { node-version: 22 }
-- run: npx github:Arthur031221/AiSniff lint --format github --max-density 20 docs/*.md
+- uses: actions/checkout@v4
+- uses: Arthur031221/AiSniff@v0.5.0
+  with:
+    paths: docs/
+    max-weighted-density: 8.7
 ```
 
 </details>

@@ -40,3 +40,13 @@ jobs:
       - run: npm run test:e2e
         env:
           CHROME: /usr/bin/google-chrome
+
+  action:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          paths: CONTRIBUTING.md docs/install.md docs/config.md
+          max-weighted-density: 8.7

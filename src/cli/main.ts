@@ -279,6 +279,11 @@ export function main(argv: string[]): number {
       console.log(VERSION);
       return 0;
     }
+    const asksHelp = rest.slice(0, rest.indexOf("--") < 0 ? rest.length : rest.indexOf("--"));
+    if (asksHelp.includes("-h") || asksHelp.includes("--help")) {
+      console.log(HELP);
+      return 0;
+    }
     if (cmd === "lint") return lint(rest);
     if (cmd === "rules") return listRules(rest);
     if (cmd === "explain") return explain(rest);

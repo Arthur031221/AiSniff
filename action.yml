@@ -1,0 +1,59 @@
+name: AiSniff
+description: Flag phrases in English and Chinese text that read like AI wrote them. Reports patterns, never authorship.
+author: Arthur031221
+branding:
+  icon: search
+  color: orange
+
+inputs:
+  paths:
+    description: Files, folders or globs to scan, separated by spaces or new lines. Folders are scanned for .md, .markdown, .mdx and .txt files.
+    default: "."
+  format:
+    description: "Output format: github (annotations), text or json."
+    default: github
+  max-density:
+    description: Fail when hits per 1,000 units are above this number.
+    default: ""
+  max-weighted-density:
+    description: Fail when the weighted density, the scale of the web meter, is above this number.
+    default: ""
+  min-confidence:
+    description: "Hide weaker rules: low, medium or high."
+    default: ""
+  disable:
+    description: Rule ids or prefixes to skip, such as en.promo, separated by commas or spaces.
+    default: ""
+  lang:
+    description: "Rule packs to load: auto, en or zh-TW."
+    default: ""
+  markdown:
+    description: "Skip code, front matter and link addresses: auto, on or off."
+    default: ""
+  config:
+    description: Path to an .aisniff.json file. By default the nearest one is used.
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Build the CLI
+      shell: bash
+      run: npm install --no-audit --no-fund --loglevel=error
+      working-directory: ${{ github.action_path }}
+    - name: Scan
+      shell: bash
+      run: ${{ github.action_path }}/scripts/action.sh
+      env:
+        INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_FORMAT: ${{ inputs.format }}
+        INPUT_MAX_DENSITY: ${{ inputs.max-density }}
+        INPUT_MAX_WEIGHTED_DENSITY: ${{ inputs.max-weighted-density }}
+        INPUT_MIN_CONFIDENCE: ${{ inputs.min-confidence }}
+        INPUT_DISABLE: ${{ inputs.disable }}
+        INPUT_LANG: ${{ inputs.lang }}
+        INPUT_MARKDOWN: ${{ inputs.markdown }}
+        INPUT_CONFIG: ${{ inputs.config }}

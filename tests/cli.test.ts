@@ -121,6 +121,18 @@ describe("aisniff lint", () => {
     expect(aisniff(["--version"]).out.trim()).toBe(version);
   });
 
+  it("shows the help after a subcommand instead of failing", () => {
+    for (const args of [
+      ["lint", "--help"],
+      ["rules", "-h"],
+      ["explain", "--help"],
+    ]) {
+      const r = aisniff(args);
+      expect(r.code).toBe(0);
+      expect(r.out).toContain("Usage");
+    }
+  });
+
   it("exits 2 on bad usage", () => {
     expect(aisniff(["lint", "--format", "xml"], "x").code).toBe(2);
     expect(aisniff(["lint", "/no/such/file"]).code).toBe(2);

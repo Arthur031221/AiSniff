@@ -51,9 +51,25 @@ The skill is one file, `skills/aisniff/SKILL.md`. It tells an agent to run the C
 ## GitHub Actions
 
 ```yaml
-- uses: actions/setup-node@v4
-  with: { node-version: 22 }
-- run: npx github:Arthur031221/AiSniff lint --format github --max-density 20 docs/*.md
+- uses: actions/checkout@v4
+- uses: Arthur031221/AiSniff@v0.5.0
+  with:
+    paths: docs/
+    max-weighted-density: 8.7
 ```
 
-`--format github` turns each hit into an annotation. `--max-density` fails the job when the density is above the number you choose. `--max-weighted-density` does the same on the weighted scale the web meter uses, where 8.7 is the "many patterns" line for English. Add `--disable en.promo` to skip a rule that does not suit your writing, and pass `docs/` to scan a whole folder.
+The action builds the CLI, scans the paths and prints one annotation per hit. It fails the job only when a limit you set is passed.
+
+| Input                  | Default  | Effect                                                                    |
+| ---------------------- | -------- | ------------------------------------------------------------------------- |
+| `paths`                | `.`      | Files, folders or globs, separated by spaces or new lines                 |
+| `format`               | `github` | `github`, `text` or `json`                                                |
+| `max-density`          | none     | Fail when hits per 1,000 units are above it                               |
+| `max-weighted-density` | none     | Fail when the weighted density is above it. 8.7 is the English meter line |
+| `min-confidence`       | `low`    | `low`, `medium` or `high`                                                 |
+| `disable`              | none     | Rule ids or prefixes such as `en.promo`, separated by commas or spaces    |
+| `lang`                 | `auto`   | `auto`, `en` or `zh-TW`                                                   |
+| `markdown`             | `auto`   | `auto`, `on` or `off`                                                     |
+| `config`               | none     | Path to an `.aisniff.json`. By default the nearest one is used            |
+
+Without the action, `npx github:Arthur031221/AiSniff lint --format github --max-density 20 docs/` does the same in a `run` step after `actions/setup-node`. `.aisniff.json` in the repository is read in both cases.
