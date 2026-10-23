@@ -39,20 +39,22 @@ HC3(사람과 챗봇의 답변이 함께 있는 공개 질의응답 데이터)�
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| 명령                                      | 동작                                                                                                              |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `aisniff lint [files...]`                 | 파일을 검사합니다. 파일이 없으면 표준 입력을 읽습니다. 걸린 항목마다 위치, 신뢰도, 규칙, 설명, 힌트를 출력합니다. |
-| `aisniff lint --format json`              | 같은 결과를 JSON으로 출력합니다. 출처 URL, 유형별 건수, 밀도가 들어 있습니다.                                     |
-| `aisniff lint --format github`            | 걸린 항목마다 GitHub Actions 주석을 하나씩 출력합니다.                                                            |
-| `aisniff lint --min-confidence medium`    | 약한 신호를 숨깁니다. 값: `low`, `medium`, `high`.                                                                |
-| `aisniff lint --max-density 20`           | 1,000단위당 건수가 이 숫자를 넘으면 종료 코드 1로 끝납니다.                                                       |
-| `aisniff lint --max-weighted-density 8.7` | 가중 밀도(웹 미터와 같은 척도)가 이 숫자를 넘으면 종료 코드 1로 끝납니다.                                         |
-| `aisniff lint --disable en.promo`         | 규칙 하나, 또는 `en.promo` 같은 접두어 아래의 모든 규칙을 건너뜁니다. 여러 번 지정할 수 있습니다.                 |
-| `aisniff lint docs/`                      | 폴더와 하위 폴더의 `.md`, `.markdown`, `.mdx`, `.txt` 파일을 검사합니다.                                          |
-| `aisniff lint --lang en`                  | 규칙 팩 하나만 불러옵니다. 값: `auto`, `en`, `zh-TW`.                                                             |
-| `aisniff lint --locale zh-TW`             | 설명과 힌트를 번체 중국어로 표시합니다.                                                                           |
-| `aisniff rules`                           | 61개 규칙 전체를 신뢰도와 함께 나열합니다.                                                                        |
-| `aisniff explain <rule-id>`               | 규칙 하나를 통과 예시와 실패 예시, 출처와 함께 보여 줍니다.                                                       |
+| 명령                                      | 동작                                                                                                                                                                                                                                                                                  |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `aisniff lint [files...]`                 | 파일을 검사합니다. 파일이 없으면 표준 입력을 읽습니다. 걸린 항목마다 위치, 신뢰도, 규칙, 설명, 힌트를 출력합니다.                                                                                                                                                                     |
+| `aisniff lint --format json`              | 같은 결과를 JSON으로 출력합니다. 출처 URL, 유형별 건수, 밀도가 들어 있습니다.                                                                                                                                                                                                         |
+| `aisniff lint --format github`            | 걸린 항목마다 GitHub Actions 주석을 하나씩 출력합니다.                                                                                                                                                                                                                                |
+| `aisniff lint --min-confidence medium`    | 약한 신호를 숨깁니다. 값: `low`, `medium`, `high`.                                                                                                                                                                                                                                    |
+| `aisniff lint --max-density 20`           | 1,000단위당 건수가 이 숫자를 넘으면 종료 코드 1로 끝납니다.                                                                                                                                                                                                                           |
+| `aisniff lint --max-weighted-density 8.7` | 가중 밀도(웹 미터와 같은 척도)가 이 숫자를 넘으면 종료 코드 1로 끝납니다.                                                                                                                                                                                                             |
+| `aisniff lint --disable en.promo`         | 규칙 하나, 또는 `en.promo` 같은 접두어 아래의 모든 규칙을 건너뜁니다. 여러 번 지정할 수 있습니다.                                                                                                                                                                                     |
+| `aisniff lint docs/`                      | 폴더와 하위 폴더의 `.md`, `.markdown`, `.mdx`, `.txt` 파일을 검사합니다.                                                                                                                                                                                                              |
+| `aisniff lint --markdown off`             | Markdown 파일을 일반 텍스트로 검사합니다. 기본적으로 `.md`, `.markdown`, `.mdx` 파일의 코드 블록, 인라인 코드, 프런트 매터, 주석, 링크 주소는 건너뜁니다. 값: `auto`, `on`, `off`.                                                                                                    |
+| `.aisniff.json`                           | 프로젝트에 같은 옵션을 설정합니다: `format`, `minConfidence`, `maxDensity`, `maxWeightedDensity`, `disable`, `markdown`, `lang`, `locale`. 현재 폴더에서 저장소 루트까지 올라가며 찾습니다. 명령줄 플래그가 우선합니다. `--config FILE`은 파일을 지정하고 `--no-config`는 무시합니다. |
+| `aisniff lint --lang en`                  | 규칙 팩 하나만 불러옵니다. 값: `auto`, `en`, `zh-TW`.                                                                                                                                                                                                                                 |
+| `aisniff lint --locale zh-TW`             | 설명과 힌트를 번체 중국어로 표시합니다.                                                                                                                                                                                                                                               |
+| `aisniff rules`                           | 61개 규칙 전체를 신뢰도와 함께 나열합니다.                                                                                                                                                                                                                                            |
+| `aisniff explain <rule-id>`               | 규칙 하나를 통과 예시와 실패 예시, 출처와 함께 보여 줍니다.                                                                                                                                                                                                                           |
 
 종료 코드: 0은 한도 안에서 검사 완료, 1은 한도 초과, 2는 사용법 오류입니다. 텍스트 출력의 마지막 줄에는 패턴을 재는 것이지 작성자를 재는 것이 아니라고 적힙니다.
 

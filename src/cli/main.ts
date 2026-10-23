@@ -1,9 +1,11 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { pickText } from "../engine";
+import { isMarkdownFile, maskMarkdown, pickText } from "../engine";
 import type { Confidence, Mark, RuleDef } from "../engine";
 import { createSniffer } from "../engine/packs";
+import { CONFIG_NAME, ConfigError, findConfig, loadConfig } from "./config";
+import type { Config } from "./config";
 import { version } from "../../package.json";
 
 const VERSION = version;
@@ -28,8 +30,13 @@ Options for lint
   --max-weighted-density N     Exit 1 when the weighted density exceeds N (the web meter's scale)
   --disable ID                 Skip one rule, or every rule under a prefix (en.promo).
                                Repeat the flag to skip several
+  --markdown auto|on|off       Skip code, front matter and link addresses (default auto: on for
+                               .md, .markdown and .mdx files, off for .txt and stdin)
   --lang auto|en|zh-TW         Rule packs to load (default auto)
   --locale CODE                Language of the messages (default en)
+  --config FILE                Read options from FILE. Without it, the nearest ${CONFIG_NAME}
+                               from the current folder up to the repository root is used
+  --no-config                  Ignore any ${CONFIG_NAME}
   -h, --help                   Show this help
   -v, --version                Show the version
 
@@ -129,47 +136,62 @@ function lint(args: string[]): number {
     args,
     allowPositionals: true,
     options: {
-      format: { type: "string", default: "text" },
-      "min-confidence": { type: "string", default: "low" },
+      format: { type: "string" },
+      "min-confidence": { type: "string" },
       "max-density": { type: "string" },
       "max-weighted-density": { type: "string" },
       disable: { type: "string", multiple: true },
-      lang: { type: "string", default: "auto" },
-      locale: { type: "string", default: "en" },
+      markdown: { type: "string" },
+      lang: { type: "string" },
+      locale: { type: "string" },
+      config: { type: "string" },
+      "no-config": { type: "boolean" },
     },
   });
-  const format = values.format as Format;
+  if (values.config !== undefined && values["no-config"])
+    throw new UsageError("--config and --no-config cannot be used together");
+  const configPath = values["no-config"] ? undefined : (values.config ?? findConfig(process.cwd()));
+  const config: Config = configPath ? loadConfig(configPath) : {};
+  const markdown = (values.markdown ?? config.markdown ?? "auto") as "auto" | "on" | "off";
+  if (!["auto", "on", "off"].includes(markdown))
+    throw new UsageError(`unknown --markdown ${markdown}`);
+  const format = (values.format ?? config.format ?? "text") as Format;
   if (!["text", "json", "github"].includes(format))
     throw new UsageError(`unknown --format ${format}`);
-  const floor = values["min-confidence"] as Confidence;
+  const floor = (values["min-confidence"] ?? config.minConfidence ?? "low") as Confidence;
   if (!CONFIDENCES.includes(floor)) throw new UsageError(`unknown --min-confidence ${floor}`);
-  const lang = values.lang as "auto" | "en" | "zh-TW";
+  const lang = (values.lang ?? config.lang ?? "auto") as "auto" | "en" | "zh-TW";
+  const locale = values.locale ?? config.locale ?? "en";
   if (!["auto", "en", "zh-TW"].includes(lang)) throw new UsageError(`unknown --lang ${lang}`);
-  const limitOf = (name: "max-density" | "max-weighted-density") => {
+  const limitOf = (name: "max-density" | "max-weighted-density", fromConfig?: number) => {
     const raw = values[name];
-    if (raw === undefined) return undefined;
+    if (raw === undefined) return fromConfig;
     const n = raw.trim() === "" ? NaN : Number(raw);
     if (!Number.isFinite(n)) throw new UsageError(`--${name} needs a number`);
     return n;
   };
-  const limit = limitOf("max-density");
-  const weightedLimit = limitOf("max-weighted-density");
+  const limit = limitOf("max-density", config.maxDensity);
+  const weightedLimit = limitOf("max-weighted-density", config.maxWeightedDensity);
 
   const sniffer = createSniffer(lang);
   const disabled = new Set<string>();
-  for (const selector of values.disable ?? []) {
+  for (const selector of [...(config.disable ?? []), ...(values.disable ?? [])]) {
     const ids = sniffer.select(selector);
     if (ids.length === 0)
       throw new UsageError(
-        `--disable ${selector} matches no rule. Run "aisniff rules" for the list`,
+        `${values.disable?.includes(selector) ? "--disable" : `"disable" in ${configPath}:`} ${selector} matches no rule. Run "aisniff rules" for the list`,
       );
     for (const id of ids) disabled.add(id);
   }
   const files = expandPaths(positionals.length ? positionals : ["-"]);
   const reports = files.map((file) => {
     const text = readInput(file);
-    const analysis = sniffer.analyze(text, floor, disabled);
-    const marks = analysis.marks.map((m) => describe(m, text, sniffer, values.locale as string));
+    const prose =
+      markdown === "on" || (markdown === "auto" && isMarkdownFile(file))
+        ? maskMarkdown(text)
+        : text;
+    const analysis = sniffer.analyze(prose, floor, disabled);
+    const marks = analysis.marks.map((m) => describe(m, text, sniffer, locale));
     return { file: file === "-" ? "<stdin>" : file, stats: analysis.stats, marks };
   });
 
@@ -262,7 +284,11 @@ export function main(argv: string[]): number {
     if (cmd === "explain") return explain(rest);
     throw new UsageError(`unknown command ${cmd}`);
   } catch (e) {
-    if (e instanceof UsageError || (e as { code?: string }).code?.startsWith("ERR_PARSE_ARGS")) {
+    if (
+      e instanceof UsageError ||
+      e instanceof ConfigError ||
+      (e as { code?: string }).code?.startsWith("ERR_PARSE_ARGS")
+    ) {
       console.error(`aisniff: ${(e as Error).message}\nRun "aisniff --help" for usage.`);
       return 2;
     }

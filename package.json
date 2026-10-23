@@ -1,6 +1,6 @@
 {
   "name": "aisniff-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Paste Traditional Chinese or English text and see which phrases read like AI wrote them, each with the rule, the source and a rewrite hint",
   "type": "module",
   "license": "MIT",

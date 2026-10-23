@@ -2,11 +2,16 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 
-function aisniff(args: string[], input?: string) {
-  const r = spawnSync(process.execPath, ["--import", "tsx", "src/cli/main.ts", ...args], {
+const MAIN = join(process.cwd(), "src/cli/main.ts");
+const TSX = pathToFileURL(join(process.cwd(), "node_modules/tsx/dist/loader.mjs")).href;
+
+function aisniff(args: string[], input?: string, cwd?: string) {
+  const r = spawnSync(process.execPath, ["--import", TSX, MAIN, ...args], {
     input,
+    cwd,
     encoding: "utf8",
   });
   return { code: r.status, out: r.stdout, err: r.stderr };
@@ -120,6 +125,111 @@ describe("aisniff lint", () => {
     expect(aisniff(["lint", "--format", "xml"], "x").code).toBe(2);
     expect(aisniff(["lint", "/no/such/file"]).code).toBe(2);
     expect(aisniff(["nope"]).code).toBe(2);
+  });
+});
+
+describe("aisniff lint on Markdown", () => {
+  const doc =
+    "---\ntitle: delve\n---\nPlain line.\n\n```\n" + SAMPLE + "```\n\nUse `delve` here.\n" + SAMPLE;
+  const write = (name: string) => {
+    const file = join(mkdtempSync(join(tmpdir(), "aisniff-")), name);
+    writeFileSync(file, doc);
+    return file;
+  };
+
+  it("skips code, front matter and inline code in .md files and keeps line numbers", () => {
+    const file = write("a.md");
+    const r = aisniff(["lint", "--format", "json", file]);
+    const marks = JSON.parse(r.out).files[0].marks;
+    expect(marks.length).toBeGreaterThan(0);
+    expect(marks.every((m: { line: number }) => m.line === 11)).toBe(true);
+    expect(
+      marks.every(
+        (m: { text: string; start: number }) =>
+          doc.slice(m.start, m.start + m.text.length) === m.text,
+      ),
+    ).toBe(true);
+  });
+
+  it("scans .txt files and stdin as plain text", () => {
+    const hits = (r: { out: string }) => JSON.parse(r.out).files[0].marks.length;
+    const md = hits(aisniff(["lint", "--format", "json", write("a.md")]));
+    expect(hits(aisniff(["lint", "--format", "json", write("a.txt")]))).toBeGreaterThan(md);
+    expect(hits(aisniff(["lint", "--format", "json"], doc))).toBeGreaterThan(md);
+  });
+
+  it("--markdown on masks stdin and --markdown off keeps .md files whole", () => {
+    const hits = (r: { out: string }) => JSON.parse(r.out).files[0].marks.length;
+    const md = hits(aisniff(["lint", "--format", "json", write("a.md")]));
+    expect(hits(aisniff(["lint", "--format", "json", "--markdown", "on"], doc))).toBe(md);
+    expect(
+      hits(aisniff(["lint", "--format", "json", "--markdown", "off", write("a.md")])),
+    ).toBeGreaterThan(md);
+    expect(aisniff(["lint", "--markdown", "maybe"], "x").code).toBe(2);
+  });
+});
+
+describe("aisniff config file", () => {
+  const project = (config: unknown, sub = "docs") => {
+    const root = mkdtempSync(join(tmpdir(), "aisniff-cfg-"));
+    mkdirSync(join(root, ".git"));
+    mkdirSync(join(root, sub), { recursive: true });
+    writeFileSync(
+      join(root, ".aisniff.json"),
+      typeof config === "string" ? config : JSON.stringify(config),
+    );
+    return { root, sub: join(root, sub) };
+  };
+  const ids = (r: { out: string }) =>
+    JSON.parse(r.out).files[0].marks.map((m: { rule: string }) => m.rule);
+
+  it("is found from a subfolder and applies its options", () => {
+    const { sub } = project({ disable: ["en.closer"], format: "json" });
+    const r = aisniff(["lint"], SAMPLE, sub);
+    expect(ids(r)).not.toContain("en.closer.in-conclusion");
+    expect(ids(r).length).toBeGreaterThan(0);
+  });
+
+  it("gives way to flags, merges disable lists and can be switched off", () => {
+    const { root } = project({ format: "json", disable: ["en.closer"], maxDensity: 1000 });
+    const flagged = aisniff(["lint", "--max-density", "1"], SAMPLE, root);
+    expect(flagged.code).toBe(1);
+    const merged = aisniff(["lint", "--disable", "en.promo"], SAMPLE, root);
+    expect(ids(merged)).not.toContain("en.closer.in-conclusion");
+    const off = aisniff(["lint", "--no-config", "--format", "json"], SAMPLE, root);
+    expect(ids(off)).toContain("en.closer.in-conclusion");
+    const text = aisniff(["lint", "--format", "text"], SAMPLE, root);
+    expect(text.out).toContain("not authorship");
+  });
+
+  it("reads a gate from the file and exits 1", () => {
+    const { root } = project({ maxWeightedDensity: 1 });
+    expect(aisniff(["lint"], SAMPLE, root).code).toBe(1);
+    expect(aisniff(["lint", "--config", join(root, ".aisniff.json")], SAMPLE).code).toBe(1);
+  });
+
+  it("stops looking at the repository root", () => {
+    const { root } = project({ maxDensity: 0 });
+    const inner = join(root, "inner");
+    mkdirSync(join(inner, ".git"), { recursive: true });
+    expect(aisniff(["lint"], SAMPLE, inner).code).toBe(0);
+  });
+
+  it("rejects a bad file, an unknown key and a rule that matches nothing", () => {
+    for (const bad of [
+      "{",
+      "[]",
+      { nope: 1 },
+      { maxDensity: "5" },
+      { disable: "en.promo" },
+      { disable: ["en.nope"] },
+    ]) {
+      const { root } = project(bad);
+      expect(aisniff(["lint"], SAMPLE, root).code).toBe(2);
+      expect(aisniff(["lint", "--no-config"], SAMPLE, root).code).toBe(0);
+    }
+    expect(aisniff(["lint", "--config", "/no/such.json"], SAMPLE).code).toBe(2);
+    expect(aisniff(["lint", "--config", "a.json", "--no-config"], SAMPLE).code).toBe(2);
   });
 });
 

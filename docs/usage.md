@@ -33,6 +33,8 @@ aisniff lint --format json draft.md  # for scripts
 aisniff lint --format github docs/*.md
 aisniff lint docs/                   # a folder: .md, .markdown, .mdx and .txt files, recursively
 aisniff lint --disable en.promo draft.md   # skip a rule, or every rule under a prefix
+aisniff lint --markdown off README.md  # scan code blocks and front matter too
+aisniff lint --config ci/aisniff.json docs/
 aisniff lint --max-density 20 draft.md
 aisniff lint --max-weighted-density 8.7 draft.md
 aisniff rules                        # every rule
@@ -43,7 +45,7 @@ Text output prints the position, confidence, rule id and matched text, then the 
 
 Exit codes: 0 when the scan ran and stayed within `--max-density` and `--max-weighted-density`, 1 when either limit was exceeded, 2 for bad usage. A bad usage includes a `--disable` value that matches no rule and a folder with no text files.
 
-`--disable` takes a rule id or a prefix that ends at a dot, so `en.promo` covers `en.promo.commitment` but `en.pro` matches nothing. Use it for rules the evaluation page shows firing as often on human text as on chatbot text. Folders skip dot folders, `node_modules` and symbolic links. A file named on the command line is always read.
+`--disable` takes a rule id or a prefix that ends at a dot, so `en.promo` covers `en.promo.commitment` but `en.pro` matches nothing. Use it for rules the evaluation page shows firing as often on human text as on chatbot text. Folders skip dot folders, `node_modules` and symbolic links. A file named on the command line is always read. Options can also live in a `.aisniff.json`, see [configuration](config.md). In Markdown files, code, front matter, comments and link addresses are skipped.
 
 ## Agent skill
 

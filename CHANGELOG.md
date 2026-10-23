@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+- CLI: Markdown files (`.md`, `.markdown`, `.mdx`) are scanned without their fenced code, inline code, front matter, HTML comments and link addresses, so docs that quote a flagged phrase no longer trip the gate. Positions still refer to the original file. `--markdown auto|on|off` controls it.
+- CLI: an optional `.aisniff.json` holds the project's options. It is found from the current folder up to the repository root, flags override it, and `--config` and `--no-config` pick or skip it. Unknown keys and rule ids that match nothing exit with code 2.
+
 ## 0.2.0
 
 - CLI: `--disable` skips a rule or a dotted prefix of rules, `lint` accepts folders and scans their `.md`, `.markdown`, `.mdx` and `.txt` files in order, and `--max-weighted-density` gates on the same scale as the web meter. `--max-density` is unchanged. `--version` now reads `package.json`.

@@ -27,7 +27,7 @@ Hit counts come from `aisniff lint` run on these exact sentences. I rewrote the 
 
 ## How well it separates the two
 
-On answers held out from HC3 (a public set of questions with human and chatbot answers), the English rules marked at least one phrase in **29% of chatbot answers and 2% of human answers**. For Chinese it was 24% and 6%.
+On answers held out from HC3 (a public set of questions with human and chatbot answers), the English rules marked at least one phrase in 29% of chatbot answers and 2% of human answers. For Chinese it was 24% and 6%.
 
 The limits matter. The test half holds 23,752 human and 13,422 chatbot English answers, and 9,812 and 8,480 Chinese ones. The chatbot answers date from its first months, so the rules for newer-model vocabulary can't be checked against them. 71% of the English chatbot answers had no hit at all. The AUROC of the density is 0.63 for English and 0.59 for Chinese, so density alone is a weak detector. Several rules fire as often on human answers as on chatbot ones, and the evaluation page lists them. Method and per-rule counts are in [docs/evaluation.md](docs/evaluation.md). Rerun it with `npm run eval`.
 
@@ -37,20 +37,22 @@ The limits matter. The test half holds 23,752 human and 13,422 chatbot English a
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| Command                                   | What it does                                                                                                    |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `aisniff lint [files...]`                 | Scans files, or stdin when no file is given. Prints each hit with position, confidence, rule, message and hint. |
-| `aisniff lint --format json`              | Same hits as JSON, with source URLs, counts per type and the density.                                           |
-| `aisniff lint --format github`            | One GitHub Actions annotation per hit.                                                                          |
-| `aisniff lint --min-confidence medium`    | Hides weak signals. Values: `low`, `medium`, `high`.                                                            |
-| `aisniff lint --max-density 20`           | Exits 1 when hits per 1,000 units are above the number.                                                         |
-| `aisniff lint --max-weighted-density 8.7` | Exits 1 when the weighted density, the scale of the web meter, is above the number.                             |
-| `aisniff lint --disable en.promo`         | Skips one rule, or every rule under a prefix such as `en.promo`. Repeat the flag to skip more.                  |
-| `aisniff lint docs/`                      | Scans a folder and its subfolders for `.md`, `.markdown`, `.mdx` and `.txt` files.                              |
-| `aisniff lint --lang en`                  | Loads one pack. Values: `auto`, `en`, `zh-TW`.                                                                  |
-| `aisniff lint --locale zh-TW`             | Messages and hints in Traditional Chinese.                                                                      |
-| `aisniff rules`                           | Lists all 61 rules with their confidence.                                                                       |
-| `aisniff explain <rule-id>`               | Shows one rule with passing and failing examples and its source.                                                |
+| Command                                   | What it does                                                                                                                                                                                                                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `aisniff lint [files...]`                 | Scans files, or stdin when no file is given. Prints each hit with position, confidence, rule, message and hint.                                                                                                                                                          |
+| `aisniff lint --format json`              | Same hits as JSON, with source URLs, counts per type and the density.                                                                                                                                                                                                    |
+| `aisniff lint --format github`            | One GitHub Actions annotation per hit.                                                                                                                                                                                                                                   |
+| `aisniff lint --min-confidence medium`    | Hides weak signals. Values: `low`, `medium`, `high`.                                                                                                                                                                                                                     |
+| `aisniff lint --max-density 20`           | Exits 1 when hits per 1,000 units are above the number.                                                                                                                                                                                                                  |
+| `aisniff lint --max-weighted-density 8.7` | Exits 1 when the weighted density, the scale of the web meter, is above the number.                                                                                                                                                                                      |
+| `aisniff lint --disable en.promo`         | Skips one rule, or every rule under a prefix such as `en.promo`. Repeat the flag to skip more.                                                                                                                                                                           |
+| `aisniff lint docs/`                      | Scans a folder and its subfolders for `.md`, `.markdown`, `.mdx` and `.txt` files.                                                                                                                                                                                       |
+| `aisniff lint --markdown off`             | Scans Markdown files as plain text. By default, code blocks, inline code, front matter, comments and link addresses in `.md`, `.markdown` and `.mdx` files are skipped. Values: `auto`, `on`, `off`.                                                                     |
+| `.aisniff.json`                           | Sets the same options for a project: `format`, `minConfidence`, `maxDensity`, `maxWeightedDensity`, `disable`, `markdown`, `lang`, `locale`. Found from the current folder up to the repository root. Flags win. `--config FILE` picks a file, `--no-config` ignores it. |
+| `aisniff lint --lang en`                  | Loads one pack. Values: `auto`, `en`, `zh-TW`.                                                                                                                                                                                                                           |
+| `aisniff lint --locale zh-TW`             | Messages and hints in Traditional Chinese.                                                                                                                                                                                                                               |
+| `aisniff rules`                           | Lists all 61 rules with their confidence.                                                                                                                                                                                                                                |
+| `aisniff explain <rule-id>`               | Shows one rule with passing and failing examples and its source.                                                                                                                                                                                                         |
 
 Exit codes: 0 scanned within the limit, 1 limit exceeded, 2 bad usage. The text output ends with a line saying it measures patterns, not authorship.
 

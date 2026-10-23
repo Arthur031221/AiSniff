@@ -13,7 +13,7 @@ AiSniff finds phrases that match documented AI-writing patterns. It reports patt
 npx github:Arthur031221/AiSniff lint FILE [FILE...]
 ```
 
-If `aisniff` is already installed, call `aisniff lint FILE`. Use `-` or no file to read stdin. Add `--format json` when you need to process the hits, and `--locale zh-TW` for Traditional Chinese messages. Pass a folder to scan its Markdown and text files, and `--disable RULE_OR_PREFIX` to skip a rule the user does not want flagged.
+If `aisniff` is already installed, call `aisniff lint FILE`. Use `-` or no file to read stdin. Add `--format json` when you need to process the hits, and `--locale zh-TW` for Traditional Chinese messages. Pass a folder to scan its Markdown and text files, and `--disable RULE_OR_PREFIX` to skip a rule the user does not want flagged. A `.aisniff.json` in the project sets the same options, and Markdown code blocks and front matter are skipped on their own.
 
 Other commands:
 

@@ -15,6 +15,7 @@ import type {
 export * from "./types";
 export { pickText } from "./locale";
 export { countUnits } from "./stats";
+export { isMarkdownFile, maskMarkdown } from "./markdown";
 
 export class Sniffer {
   readonly packs: PackDef[];

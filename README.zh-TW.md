@@ -39,20 +39,22 @@ AiSniff 會標出英文與中文文字裡，符合已公開記載的 AI 寫作�
 npx github:Arthur031221/AiSniff lint draft.md
 ```
 
-| 指令                                      | 作用                                                                                |
-| ----------------------------------------- | ----------------------------------------------------------------------------------- |
-| `aisniff lint [files...]`                 | 掃描檔案，沒有給檔案時讀標準輸入。逐項印出位置、信心、規則、說明與建議。            |
-| `aisniff lint --format json`              | 同樣的結果輸出成 JSON，含來源網址、各類型數量與密度。                               |
-| `aisniff lint --format github`            | 每個命中輸出一則 GitHub Actions 註解。                                              |
-| `aisniff lint --min-confidence medium`    | 隱藏弱訊號。可用值：`low`、`medium`、`high`。                                       |
-| `aisniff lint --max-density 20`           | 每千單位的命中數超過該數字時以代碼 1 結束。                                         |
-| `aisniff lint --max-weighted-density 8.7` | 加權密度（網頁儀表使用的刻度）超過該數字時以代碼 1 結束。                           |
-| `aisniff lint --disable en.promo`         | 略過一條規則，或某個前綴（例如 `en.promo`）下的所有規則。重複使用此旗標可略過更多。 |
-| `aisniff lint docs/`                      | 掃描資料夾與其子資料夾中的 `.md`、`.markdown`、`.mdx` 和 `.txt` 檔案。              |
-| `aisniff lint --lang en`                  | 只載入一個規則包。可用值：`auto`、`en`、`zh-TW`。                                   |
-| `aisniff lint --locale zh-TW`             | 以繁體中文顯示說明與建議。                                                          |
-| `aisniff rules`                           | 列出全部 61 條規則與其信心。                                                        |
-| `aisniff explain <rule-id>`               | 顯示單一規則、通過與不通過的範例，以及來源。                                        |
+| 指令                                      | 作用                                                                                                                                                                                                                                   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `aisniff lint [files...]`                 | 掃描檔案，沒有給檔案時讀標準輸入。逐項印出位置、信心、規則、說明與建議。                                                                                                                                                               |
+| `aisniff lint --format json`              | 同樣的結果輸出成 JSON，含來源網址、各類型數量與密度。                                                                                                                                                                                  |
+| `aisniff lint --format github`            | 每個命中輸出一則 GitHub Actions 註解。                                                                                                                                                                                                 |
+| `aisniff lint --min-confidence medium`    | 隱藏弱訊號。可用值：`low`、`medium`、`high`。                                                                                                                                                                                          |
+| `aisniff lint --max-density 20`           | 每千單位的命中數超過該數字時以代碼 1 結束。                                                                                                                                                                                            |
+| `aisniff lint --max-weighted-density 8.7` | 加權密度（網頁儀表使用的刻度）超過該數字時以代碼 1 結束。                                                                                                                                                                              |
+| `aisniff lint --disable en.promo`         | 略過一條規則，或某個前綴（例如 `en.promo`）下的所有規則。重複使用此旗標可略過更多。                                                                                                                                                    |
+| `aisniff lint docs/`                      | 掃描資料夾與其子資料夾中的 `.md`、`.markdown`、`.mdx` 和 `.txt` 檔案。                                                                                                                                                                 |
+| `aisniff lint --markdown off`             | 把 Markdown 檔案當作純文字掃描。預設會略過 `.md`、`.markdown` 和 `.mdx` 檔案中的程式碼區塊、行內程式碼、前置資料、註解和連結網址。可選值：`auto`、`on`、`off`。                                                                        |
+| `.aisniff.json`                           | 為專案設定相同的選項：`format`、`minConfidence`、`maxDensity`、`maxWeightedDensity`、`disable`、`markdown`、`lang`、`locale`。從目前資料夾往上找，直到儲存庫根目錄。命令列旗標優先。`--config FILE` 指定檔案，`--no-config` 則忽略它。 |
+| `aisniff lint --lang en`                  | 只載入一個規則包。可用值：`auto`、`en`、`zh-TW`。                                                                                                                                                                                      |
+| `aisniff lint --locale zh-TW`             | 以繁體中文顯示說明與建議。                                                                                                                                                                                                             |
+| `aisniff rules`                           | 列出全部 61 條規則與其信心。                                                                                                                                                                                                           |
+| `aisniff explain <rule-id>`               | 顯示單一規則、通過與不通過的範例，以及來源。                                                                                                                                                                                           |
 
 結束代碼：0 為掃描完成且未超過上限，1 為超過上限，2 為用法錯誤。文字輸出的最後一行會說明它衡量的是模式，不是作者。
 
